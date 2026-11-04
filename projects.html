@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Projects | Winnie Chen</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="page projects-page">
+
+  <main class="pond">
+    <div class="pond-deco" aria-hidden="true">
+      <!-- EDIT HERE - YOUR VINES: data-src is the drawing, data-guides has one plain stroked line per
+           vine (same layer order), drawn from where the vine starts growing to its tip.
+           Each vine is uncovered along its guide line as you scroll.
+           If the page proportions change, update aspect-ratio on .pond in styles.css. -->
+      <div class="vines" data-src="assets/vines.svg" data-guides="assets/vine-guide.svg"></div>
+
+      <!-- EDIT HERE - YOUR LILY PADS / FLOWERS: swap the src for any image.
+           --x / --y place the top-left corner (percent of the page), --w sets the width,
+           --rot tilts it. Later lines sit on top, so pads go before the flowers resting on them.
+           To hang one off the side of the screen, add class "edge-left" or "edge-right":
+           --x then measures from that edge of the screen, and a negative --x pushes it off. -->
+      <img class="deco" src="assets/lilypad1.svg" alt="" style="--x: 70%;   --y: 3.2%;  --w: 28%;">
+      <img class="deco edge-left"  src="assets/lilypad3.svg" alt="" style="--x: 0%; --y: 24%;   --w: 22%;">
+      <img class="deco"            src="assets/lilypad2.svg" alt="" style="--x: 21%;   --y: 18.2%; --w: 23%; --rot: -6deg;">
+      <img class="deco edge-left"  src="assets/flower1.svg"  alt="" style="--x: -3%;   --y: 18%; --w: 25%; --rot: 4deg;">
+      <img class="deco"            src="assets/lilypad2.svg" alt="" style="--x: 25.5%; --y: 36.5%; --w: 22.5%; --rot: 8deg;">
+      <img class="deco edge-right" src="assets/lilypad2.svg" alt="" style="--x: 3%;    --y: 38%;   --w: 24.5%;">
+      <img class="deco edge-right" src="assets/flower2.svg"  alt="" style="--x: 4%;    --y: 28.7%; --w: 26.5%;">
+      <img class="deco edge-left"  src="assets/lilypad3.svg" alt="" style="--x: 0%;    --y: 51%;   --w: 23%;">
+      <img class="deco edge-left"  src="assets/flower2.svg"  alt="" style="--x: -0.5%; --y: 46.9%; --w: 16%;">
+      <img class="deco edge-right" src="assets/lilypad1.svg" alt="" style="--x: 2%;    --y: 51.8%; --w: 24.5%; --rot: 4deg;">
+      <img class="deco"            src="assets/lilypad1.svg" alt="" style="--x: 34.8%; --y: 68.5%; --w: 23%;">
+      <img class="deco"            src="assets/flower1.svg"  alt="" style="--x: 29%;   --y: 62.1%; --w: 28.5%;">
+      <img class="deco edge-left"  src="assets/lilypad2.svg" alt="" style="--x: 0%;    --y: 69.3%; --w: 20.5%; --rot: -8deg;">
+      <img class="deco"            src="assets/lilypad3.svg" alt="" style="--x: 21.4%; --y: 81.5%; --w: 27.5%;">
+      <img class="deco edge-right" src="assets/lilypad3.svg" alt="" style="--x: 2%;    --y: 88.3%; --w: 22.5%;">
+      <img class="deco edge-right" src="assets/flower1.svg"  alt="" style="--x: 1%;    --y: 81.2%; --w: 23%;">
+    </div>
+
+    <div class="pond-inner">
+      <a class="back" href="index.html">back home</a>
+
+      <header class="projects-header">
+        <h1>projects</h1>
+      </header>
+
+      <!-- Each row holds two projects. Stamps are yellow; add project-row--white for white ones. -->
+      <section class="project-row">
+        <article class="project">
+          <!-- drop an <img src="..." alt="..."> inside .stamp-photo -->
+          <!-- Focus Cat: this stamp is a button. Hovering it opens it out and plays the
+               preview video; clicking it opens the pop-up with the matching id
+               (data-dialog="project-focus-cat" → <dialog id="project-focus-cat"> below). -->
+          <button class="stamp" type="button" data-dialog="project-focus-cat"
+                  aria-label="Open details for Focus Cat">
+            <span class="stamp-photo">
+              <!-- EDIT HERE - PREVIEW VIDEO: put your animation's file path in the <source> line
+                   and remove the comment marks around it. It plays on hover, muted and looping. -->
+              <video class="stamp-video" muted loop playsinline preload="none" aria-hidden="true">
+                <!-- <source src="assets/focus-cat-preview.mp4" type="video/mp4"> -->
+              </video>
+            </span>
+          </button>
+          <div class="project-text">
+            <h2>focus cat</h2>
+            <p>a focus app to help you stay productive.</p>
+            <p class="projects-date">sep 2025 - april 2026</p>
+          </div>
+        </article>
+        <article class="project">
+          <div class="stamp"><div class="stamp-photo"></div></div>
+          <div class="project-text">
+            <h2>coming soon...</h2>
+            <p>check back later for updates! for now enjoy the background flower animation.</p>
+          </div>
+        </article>
+      </section>
+
+      <section class="project-row">
+        <article class="project">
+          <div class="stamp"><div class="stamp-photo"></div></div>
+          <div class="project-text">
+            <h2>coming soon...</h2>
+            <p>check back later for updates! for now enjoy the background flower animation.</p>
+          </div>
+        </article>
+        <article class="project">
+          <div class="stamp"><div class="stamp-photo"></div></div>
+          <div class="project-text">
+            <h2>coming soon...</h2>
+            <p>check back later for updates! for now enjoy the background flower animation.</p>
+          </div>
+        </article>
+      </section>
+
+      <section class="project-row">
+        <article class="project">
+          <div class="stamp"><div class="stamp-photo"></div></div>
+          <div class="project-text">
+            <h2>coming soon...</h2>
+            <p>check back later for updates! for now enjoy the background flower animation.</p>
+          </div>
+        </article>
+        <article class="project">
+          <div class="stamp"><div class="stamp-photo"></div></div>
+          <div class="project-text">
+            <h2>coming soon...</h2>
+            <p>check back later for updates! for now enjoy the background flower animation.</p>
+          </div>
+        </article>
+      </section>
+
+      <section class="project-row">
+        <article class="project">
+          <div class="stamp"><div class="stamp-photo"></div></div>
+          <div class="project-text">
+            <h2>coming soon...</h2>
+            <p>check back later for updates! for now enjoy the background flower animation.</p>
+          </div>
+        </article>
+        <article class="project">
+          <div class="stamp"><div class="stamp-photo"></div></div>
+          <div class="project-text">
+            <h2>coming soon...</h2>
+            <p>check back later for updates! for now enjoy the background flower animation.</p>
+          </div>
+        </article>
+      </section>
+
+      <section class="project-row">
+        <article class="project">
+          <div class="stamp"><div class="stamp-photo"></div></div>
+          <div class="project-text">
+            <h2>coming soon...</h2>
+            <p>check back later for updates! for now enjoy the background flower animation.</p>
+          </div>
+        </article>
+        <article class="project">
+          <div class="stamp"><div class="stamp-photo"></div></div>
+          <div class="project-text">
+            <h2>coming soon...</h2>
+            <p>check back later for updates! for now enjoy the background flower animation.</p>
+          </div>
+        </article>
+      </section>
+    </div>
+  </main>
+
+  <!-- Project pop-ups. Each one opens from the stamp whose data-dialog matches its id.
+       Click outside the box, press Esc, or use the × button to close. -->
+  <dialog class="project-dialog" id="project-focus-cat" aria-labelledby="focus-cat-title">
+    <div class="project-dialog-body">
+      <!-- method="dialog" makes this button close the pop-up without any JavaScript -->
+      <form method="dialog">
+        <button class="project-dialog-close" aria-label="Close">×</button>
+      </form>
+
+      <!-- EDIT HERE - IMAGES: each grey dashed box below is a placeholder. To fill one,
+           save your image to the path in its comment, then swap the placeholder <span>
+           for the <img> line under it (and remove that line's comment marks). -->
+
+      <!-- Title, the app running, and a one-line summary -->
+      <h2 id="focus-cat-title">focus cat</h2>
+      <!-- Link to the code, styled as a yellow button right under the title -->
+      <p class="dialog-github-row">
+        <a class="dialog-github" href="https://github.com/winnie-c8/Focus-Cat" target="_blank" rel="noopener">view the code on github ↗</a>
+      </p>
+      <figure class="dialog-figure dialog-figure--hero">
+        <span class="figure-placeholder">gif of it running</span>
+        <!-- <img src="assets/focus-cat/running.gif" alt="Focus Cat running: the timer counting down in the cat's room"> -->
+      </figure>
+      <p class="dialog-lead">a cozy pomodoro app where every minute focused buys you something new to decorate your cat's room.</p>
+
+      <!-- Quick facts: what it's built with, and who it's for -->
+      <div class="dialog-facts">
+        <p class="dialog-label">built with</p>
+        <ul class="dialog-built">
+          <li>Java</li>
+          <li>JSON/Gson</li>
+          <li>JFreeChart</li>
+          <li>Maven</li>
+        </ul>
+        <p class="dialog-badge">built for a real client!</p>
+      </div>
+
+      <!-- The four main features, as a numbered list -->
+      <section class="project-dialog-section">
+        <h3>four core features</h3>
+        <ol class="dialog-features">
+          <li><strong>timer</strong>: pomodoro timer (alternates between 25-minute work sessions with 5-minute breaks) or choose your own custom timer (any length of time). more time focused = more coins</li>
+          <li><strong>to-do list</strong>: add, edit, reorder, sort tasks by date. undo/redo actions with ctrl z / ctrl y</li>
+          <li><strong>store</strong>: spend coins from timer on background items (cats, room decor)</li>
+          <li><strong>productivity tracker</strong>: a graph of your hours focused, viewable by week, month, or year</li>
+        </ol>
+      </section>
+
+      <!-- Why the app was needed, backed up by the survey -->
+      <section class="project-dialog-section">
+        <h3>the problem</h3>
+        <p>My client, a third-year university student balancing classes and running a club, struggled to keep track of deadlines and stay focused once she sat down to work. Every focus app she'd tried fell short: missing key features, frustrating to use, or too expensive. She wanted one free laptop app to manage her tasks, stay focused, and actually enjoy using, so I built it for her. I also surveyed other students to see whether this was a wider problem. <strong>Most wanted to work about 5 hours a day but managed closer to 3, and everyone who had tried a focus app rated it 5/10 or lower.</strong></p>
+        <figure class="dialog-figure">
+          <img src="assets/focus-cat/survey.png" alt="Bar chart: 7 students rated focus apps they'd tried; every rating was 5 out of 10 or lower">
+          <figcaption>how effective students rated the focus apps they'd tried (1–10)</figcaption>
+        </figure>
+      </section>
+
+      <!-- How the timer screen changed after the client's feedback -->
+      <section class="project-dialog-section">
+        <h3>iterations</h3>
+        <figure class="dialog-figure">
+          <img src="assets/focus-cat/wireframe-1.png" alt="Initial wireframe of the timer screen: a large 00:00:00 with a start button">
+          <figcaption>initial wireframe (timer screen)</figcaption>
+        </figure>
+        <figure class="dialog-figure">
+          <img src="assets/focus-cat/wireframe-2.png" alt="Updated wireframe: arrow buttons to change hours, minutes and seconds">
+          <figcaption>updated wireframe (pomodoro timer)</figcaption>
+        </figure>
+        <figure class="dialog-figure">
+          <img src="assets/focus-cat/wireframe-3.png" alt="Wireframe after feedback: work/break label, pause, resume and skip buttons">
+          <figcaption>updated wireframe (custom timer)</figcaption>
+        </figure>
+        <p>After client feedback: the timer was buried in a menu, so I moved it to the home screen. the pomodoro timer now has pause/resume/skip controls, while the custom timer moved to a secondary panel.</p>
+      </section>
+
+      <!-- The hand-painted look: four screens side by side -->
+      <section class="project-dialog-section">
+        <h3>visual design</h3>
+        <p class="dialog-label">design mockups</p>
+        <div class="dialog-gallery">
+          <figure class="dialog-figure">
+            <img src="assets/focus-cat/mockup-timer.png" alt="Painted timer screen in a cosy room">
+          </figure>
+          <figure class="dialog-figure">
+            <img src="assets/focus-cat/mockup-menu.png" alt="Painted main menu with the cat and buttons for timer, to-do, store and productivity">
+          </figure>
+          <figure class="dialog-figure">
+            <img src="assets/focus-cat/mockup-todo.png" alt="Painted to-do screen with a sleeping cat">
+          </figure>
+          <figure class="dialog-figure">
+            <img src="assets/focus-cat/mockup-tracker.png" alt="Painted productivity tracker with a graph of hours focused">
+          </figure>
+          <figure class="dialog-figure">
+            <img src="assets/focus-cat/mockup-store.png" alt="Painted store screen with a sleeping cat and items to buy with coins">
+          </figure>
+        </div>
+        <p>goal: make it feel like a cozy room, not a productivity tool. hand-painted every background and all the store items to achieve this effect!</p>
+      </section>
+
+      <!-- How the code is organised, before and after -->
+      <section class="project-dialog-section">
+        <h3>code architecture</h3>
+        <figure class="dialog-figure">
+          <img src="assets/focus-cat/uml-1.png" alt="Initial UML class diagram">
+          <figcaption>initial uml diagram</figcaption>
+        </figure>
+        <figure class="dialog-figure">
+          <img src="assets/focus-cat/uml-2.png" alt="Updated UML class diagram">
+          <figcaption>updated uml diagram</figcaption>
+        </figure>
+        <p class="dialog-label">updates to the structure:</p>
+        <ul>
+          <li>removed login (use local storage through gson instead)</li>
+          <li>split timers into Pomodoro and Custom subclasses</li>
+          <li>gave the checklist undo/redo stacks</li>
+        </ul>
+      </section>
+
+      <!-- What was learned, and ideas for later -->
+      <section class="project-dialog-section">
+        <h3>reflection + what's next?</h3>
+        <p>Building for a real person changed how I designed. My first wireframes missed a few key details my client was looking for, like the custom timer. but after her feedback, I restructured the app to match her requests. It taught me to take the design process slowly and check in at each stage, so I could catch mismatches in expectations before building on them.</p>
+        <p class="dialog-label">future improvements:</p>
+        <ul>
+          <li>block distracting websites during focus sessions
+            <ul>
+              <li>implementation: create a chrome extension using HTML and JavaScript that can sync to the app</li>
+            </ul>
+          </li>
+          <li>cloud sync and backup
+            <ul>
+              <li>allows saving data across multiple devices</li>
+              <li>extra layer of security so data is saved even if local file is destroyed</li>
+              <li>implementation: use an API such as Google Drive API</li>
+            </ul>
+          </li>
+        </ul>
+      </section>
+
+      <p class="dialog-footnote">full documentation available on request</p>
+    </div>
+  </dialog>
+
+  <!-- Enlarged image viewer: one shared pop-up for every image in the project pop-ups.
+       script.js puts the clicked picture and its caption in here, then opens it on top.
+       Click outside the picture, press Esc, or use the × to close it. -->
+  <dialog class="image-viewer" aria-label="Enlarged image">
+    <form method="dialog">
+      <button class="image-viewer-close" aria-label="Close enlarged image">×</button>
+    </form>
+    <figure>
+      <img class="image-viewer-img" alt="">
+      <figcaption class="image-viewer-caption"></figcaption>
+    </figure>
+  </dialog>
+
+  <script src="script.js"></script>
+</body>
+</html>

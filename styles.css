@@ -1,0 +1,923 @@
+/* ---------- Fonts ----------
+   Put your font files in /fonts and update the file names below.
+   .woff2 is best; add a .woff line too if you have one. */
+@font-face {
+  font-family: "TitleFont";           
+  src: url("fonts/DarumadropOne-Regular.ttf") format("truetype");
+  font-display: swap;
+}
+@font-face {
+  font-family: "TextFont";
+  src: url("fonts/Cweyons-Regular.ttf") format("truetype");
+  font-display: swap;
+}
+/* The body text inside the project pop-ups. It's an .otf file,
+   so its format is "opentype" rather than "truetype". */
+@font-face {
+  font-family: "PopupFont";
+  src: url("fonts/Tommy-Regular.otf") format("opentype");
+  font-display: swap;
+}
+
+/* ---------- Tokens ---------- */
+:root {
+  --green-deep: #2f4a33;
+  --green-mid: #6f9a5a;
+  --cream: #ffffff;
+  --yellow: #f2c14e;
+
+  --font-title: "TitleFont", "Comic Sans MS", "Marker Felt", cursive;
+  --font-text: "TextFont", "Comic Sans MS", "Marker Felt", cursive;
+  /* If Tommy can't load, fall back to a plain, rounded-ish system font */
+  --font-popup: "PopupFont", "Trebuchet MS", system-ui, sans-serif;
+}
+
+/* ---------- Reset-ish ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body { margin: 0; height: 100%; }
+
+body {
+  background: var(--green-deep);
+  color: var(--cream);
+  font-family: var(--font-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; }
+
+a:focus-visible {
+  outline: 3px solid var(--yellow);
+  outline-offset: 6px;
+  border-radius: 8px;
+}
+
+/* ---------- Hero ---------- */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* Background image. Slightly oversized so it can drift without showing edges. */
+.hero-bg {
+  position: absolute;
+  inset: -1.5%;
+  z-index: -2;
+  background:
+    url("assets/background1.svg") 0 0 / 100% 100% no-repeat,
+    radial-gradient(circle at 30% 20%, #9bc384, var(--green-mid) 60%, #4d7a45);
+  will-change: transform;
+}
+
+/* ---------- Connect menu ---------- */
+.connect {
+  position: absolute;
+  top: clamp(1rem, 2.5vw, 2rem);
+  right: clamp(1rem, 2.5vw, 2rem);
+  z-index: 10;
+}
+
+.connect-btn {
+  background: none;
+  border: 0;
+  padding: 0;
+  color: inherit;
+  font: inherit;
+  font-size: clamp(1rem, 1.6vw, 1.35rem);
+  cursor: pointer;
+}
+.connect-btn:hover,
+.connect-btn[aria-expanded="true"] {
+  text-decoration: underline wavy var(--yellow);
+  text-underline-offset: 5px;
+}
+.connect-btn:focus-visible {
+  outline: 3px solid var(--yellow);
+  outline-offset: 6px;
+  border-radius: 8px;
+}
+
+.connect-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  list-style: none;
+  min-width: 13rem;
+
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px);
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s linear 0.2s;
+}
+
+.connect-menu.is-open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s;
+}
+
+.connect-menu li {
+  list-style: none;
+  display: flex;
+  justify-content: flex-end;   /* link hugs the right edge and shrinks to its content */
+}
+
+.connect-menu a {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;   /* everything hugs the right edge */
+  gap: 0.75rem;
+  padding: 0.6rem 1.1rem;
+  border-radius: 14px;
+  font-size: clamp(1rem, 1.5vw, 1.2rem);
+  text-decoration: none;
+  text-shadow: 0 1px 6px rgba(47, 74, 51, 0.45);
+}
+
+.connect-menu a:hover,
+.connect-menu a:focus-visible {
+  background: var(--yellow);
+  color: var(--green-deep);
+  text-shadow: none;
+  outline: none;
+}
+
+.menu-icon {
+  flex: none;
+  width: 1.3em;
+  height: 1.3em;
+}
+
+/* ---------- Centre content ---------- */
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(1rem, 2.5vw, 1.75rem);
+  padding: 2rem 1rem;
+  text-align: center;
+}
+
+/* "hi, i'm" + name */
+.intro {
+  margin: 0;
+  font-weight: normal;
+  display: flex;
+  flex-direction: column;
+  align-items: center;   /* greeting sits left, above the name */
+}
+
+.intro-greeting {
+  font-family: var(--font-text);
+  font-size: clamp(1.25rem, 2.6vw, 2.1rem);
+  margin-left: 2%;
+  margin-bottom: -0.25em;
+}
+
+.intro-name {
+  position: relative;        /* the cat is positioned against this */
+  font-family: var(--font-title);
+  font-size: clamp(3rem, 11vw, 7.5rem);
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--cream);
+  /* yellow outline behind white fill */
+  -webkit-text-stroke: 0.04em var(--yellow);
+  paint-order: stroke fill;
+  text-shadow: 0 0 0.25em rgba(242, 193, 78, 0.35);
+}
+
+/* Cat doodle: tweak top/right/width until it perches like in your mockup */
+.intro-cat {
+  position: absolute;
+  top: -62%;
+  right: -22%;
+  width: 46%;
+  height: auto;
+  pointer-events: none;
+  -webkit-text-stroke: 0;
+}
+
+/* Small tagline */
+.tagline {
+  margin: 0;
+  font-family: var(--font-text);
+  font-size: clamp(0.85rem, 1.5vw, 1.3rem);
+  letter-spacing: 0.1em;
+  opacity: 0.85;
+}
+
+/* ---------- Icon nav ---------- */
+.icon-nav {
+  display: flex;
+  justify-content: center;
+  gap: clamp(1.5rem, 5vw, 3.5rem);
+  margin-top: clamp(0.25rem, 1vw, 0.75rem);
+}
+
+.icon-link {
+  position: relative;
+  display: block;
+  line-height: 0;
+  isolation: isolate;
+  text-decoration: none;
+}
+
+.icon-link img {
+  display: block;
+  height: clamp(44px, 5vw, 80px);
+  width: auto;
+}
+
+.icon-link--wide img {
+  width: clamp(64px, 9vw, 104px);
+}
+
+/* The rough paper blob behind the icon */
+.icon-link::before {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  z-index: -1;
+  background: var(--blob);
+  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><filter id='r' x='-20%25' y='-20%25' width='140%25' height='140%25'><feTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='3' seed='4' result='n'/><feDisplacementMap in='SourceGraphic' in2='n' scale='12' xChannelSelector='R' yChannelSelector='G'/></filter><rect x='14' y='14' width='72' height='72' rx='8' filter='url(%23r)'/></svg>") center / 100% 100% no-repeat;
+          mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><filter id='r' x='-20%25' y='-20%25' width='140%25' height='140%25'><feTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='3' seed='4' result='n'/><feDisplacementMap in='SourceGraphic' in2='n' scale='12' xChannelSelector='R' yChannelSelector='G'/></filter><rect x='14' y='14' width='72' height='72' rx='8' filter='url(%23r)'/></svg>") center / 100% 100% no-repeat;
+  opacity: 0;
+  transform: scale(0.8) rotate(var(--rot, 0deg));
+  transition: opacity 0.2s ease, transform 0.25s ease;
+}
+
+/* The small label under the icon */
+.icon-label {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-top: 0.9rem;
+  transform: translate(-50%, 4px);
+  white-space: nowrap;
+  line-height: 1;
+  font-family: var(--font-text);
+  font-size: clamp(0.85rem, 2vw, 1.5rem);
+  letter-spacing: 0.08em;
+  opacity: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  margin-top: 1.4rem;
+}
+
+.icon-link:hover::before,
+.icon-link:focus-visible::before {
+  opacity: 1;
+  transform: scale(1) rotate(var(--rot, 0deg));
+}
+
+.icon-link:hover .icon-label,
+.icon-link:focus-visible .icon-label {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+/* Touch screens have no hover, so always show the labels there */
+@media (hover: none) {
+  .icon-label { opacity: 0.9; transform: translate(-50%, 0); }
+}
+
+/* ---------- Small screens ---------- */
+@media (max-width: 600px) {
+  .intro-cat { top: -70%; right: -12%; width: 40%; }
+  .tagline { letter-spacing: 0.14em; max-width: 22ch; line-height: 1.6; }
+}
+
+/* ---------- Motion preferences ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .icon-link::before,
+  .icon-label { transition: none; }
+  .connect-menu { transition: none; }
+}
+
+/* ---------- Sub-pages ---------- */
+.page {
+  min-height: 100vh;
+  background: var(--green-mid);
+}
+
+.back {
+  display: inline-block;
+  margin: clamp(1rem, 2.5vw, 2rem);
+  font-size: clamp(1rem, 1.6vw, 1.35rem);
+  text-decoration: none;
+}
+.back:hover { text-decoration: underline wavy var(--yellow); text-underline-offset: 5px; }
+
+.page-content {
+  max-width: 48rem;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+.page-content h1 {
+  font-family: var(--font-title);
+  font-weight: normal;
+  font-size: clamp(2.5rem, 7vw, 5rem);
+  margin: 0 0 1rem;
+}
+/* ---------- Projects page ---------- */
+.projects-page {
+  --stamp-yellow: #e9c46a;
+  --title-tan: #e2c08a;
+
+  height: auto;
+  overflow-x: hidden;
+  background: #3f9d5a linear-gradient(180deg, #1c3f24 0%, #2a6a3a 45%, #3f9d5a 100%) no-repeat;
+}
+
+/* Scrolling up past the top shrinks the vines (script.js), so switch off the
+   browser's own bounce / pull-to-refresh there */
+html:has(.projects-page) { overscroll-behavior-y: none; }
+
+/* The page background is sized to <html>, which the reset makes one screen tall,
+   so on a long page the gradient repeated every screen. Let <html> stretch to the
+   full page here so the gradient runs top to bottom exactly once. */
+html:has(.projects-page) {
+  height: auto;
+  min-height: 100%;
+}
+
+/* Fine grain over the whole page, like risograph paper */
+.projects-page::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  opacity: 0.22;
+  mix-blend-mode: soft-light;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+/* Stacking inside the pond: vines (0) < stamps (1) < flowers (2) < text (3).
+   The pond is only as tall as the projects, so the page stops scrolling at the
+   bottom of the last frame. The vines-and-flowers layer inside keeps the
+   mockup's taller shape (see .pond-deco), and overflow-y: clip trims whatever
+   of it hangs below the last frame. Sideways nothing is trimmed, so flowers can
+   still hang off the edges of the screen. */
+.pond {
+  position: relative;
+  isolation: isolate;
+  max-width: 1332px;
+  margin: 0 auto;
+  overflow-x: visible;
+  overflow-y: clip;
+}
+
+/* No z-index here on purpose: it would lock the vines and flowers together
+   as one layer. Without it, each can slot in at its own level around the stamps. */
+/* Sideways, flowers may stick out past the pond; the page itself cuts them off
+   at the edge of the screen (overflow-x: hidden on .projects-page). Up and down
+   they're still trimmed to the pond, so nothing adds extra scrolling at the bottom. */
+/* The layer keeps the mockup's proportions (1332 x 2250) so the vines and
+   flowers line up with the projects exactly as before, even though the page
+   now ends sooner. On narrow screens where the projects stack into one tall
+   column, min-height stretches it to cover them all. */
+.pond-deco {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  aspect-ratio: 1332 / 2250;
+  min-height: 100%;
+  overflow-x: visible;
+  overflow-y: clip;
+  pointer-events: none;
+}
+
+/* Your vines.svg gets loaded in here and stretched over the whole page;
+   script.js grows each vine along its guide line */
+.vines,
+.vines > svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.vines { z-index: 0; }  /* behind the stamps */
+
+/* Lily pads + flowers bloom open when the vines reach them */
+.deco {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  z-index: 2;  /* in front of the stamps, behind the text */
+  width: var(--w);
+  height: auto;
+  opacity: 0;
+  transform: scale(0.4) rotate(calc(var(--rot, 0deg) - 25deg));
+  transform-origin: 50% 70%;
+  transition: opacity 0.6s ease, transform 1.1s cubic-bezier(0.2, 0.9, 0.3, 1.25);
+}
+.deco.is-in {
+  opacity: 1;
+  transform: scale(1) rotate(var(--rot, 0deg));
+}
+
+/* Flowers marked edge-left / edge-right are measured from the edge of the
+   SCREEN instead of the edge of the pond, so a negative --x makes them hang
+   off the screen. (100% - 100vw) / 2 is how far the screen's edge is outside
+   the pond: zero on smaller screens, and the empty margin on wide ones. */
+.deco.edge-left {
+  left: calc((100% - 100vw) / 2 + var(--x));
+}
+
+/* Same idea from the right: --x is the distance from the right-hand edge
+   of the screen to the right-hand side of the image. */
+.deco.edge-right {
+  left: auto;
+  right: calc((100% - 100vw) / 2 + var(--x));
+}
+
+/* No padding at the bottom, so the page ends right after the last row of frames */
+.pond-inner {
+  padding: 0 4% 0;
+  text-shadow:
+  0 1px 2px rgba(10, 30, 15, 0.9),
+  0 0 10px rgba(10, 30, 15, 0.75);
+}
+
+.pond-inner .back,
+.projects-header {
+  position: relative;
+  z-index: 3;
+}
+/* Sits above the big "projects" title, which otherwise overlaps it and swallows
+   clicks. The padding gives a bigger area to click or tap; the negative margin
+   cancels it out so the text stays where it was. */
+.pond-inner .back {
+  z-index: 4;
+  margin: calc(1rem - 0.5em) -0.75em 0;
+  padding: 0.5em 0.75em;
+}
+
+.projects-header h1 {
+  margin: 0;
+  font-family: var(--font-title);
+  font-weight: normal;
+  font-size: clamp(2.5rem, 6vw, 5.5rem);
+  line-height: 1.1;
+  color: var(--title-tan);
+}
+
+.projects-date {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0.5em 0 0;
+  font-size: clamp(0.75rem, 1vw, 0.95rem);
+  color: var(--yellow);
+}
+
+.project-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 3%;
+  padding: 2% 0;
+  --stamp: var(--stamp-yellow);
+}
+/* The last row keeps a small gap under its frames, so the bottom edge of the
+   stamps isn't pressed right against the bottom of the screen (and a stamp that
+   grows on hover doesn't get its bottom trimmed off) */
+.project-row:last-of-type { padding-bottom: 1.5rem; }
+
+.project {
+  display: grid;
+  grid-template-columns: minmax(0, 2.4fr) minmax(0, 1fr);
+  gap: 4%;
+  align-items: start;
+}
+
+/* Postage stamp: circles bitten out of the edges, solid inside */
+.stamp {
+  --r: clamp(4px, 0.6vw, 8px);
+  position: relative;
+  z-index: 1;
+  padding: calc(2 * var(--r));
+  background:
+    radial-gradient(var(--r), #0000 98%, var(--stamp)) round
+      calc(-1.5 * var(--r)) calc(-1.5 * var(--r)) / calc(3 * var(--r)) calc(3 * var(--r)),
+    linear-gradient(var(--stamp) 0 0) no-repeat
+      50% / calc(100% - 3 * var(--r)) calc(100% - 3 * var(--r));
+}
+
+.stamp-photo {
+  aspect-ratio: 4 / 3;
+  background: #24502e;
+  overflow: hidden;
+}
+.stamp-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.project-text {
+  position: relative;
+  z-index: 3;
+  font-size: clamp(0.7rem, 1.5vw, rem);
+  line-height: 1.4;
+}
+.project-text h2 {
+  margin: 0 0 0.35rem;
+  font-family: var(--font-title);
+  font-weight: normal;
+  font-size: 2.5rem;
+  color: var(--yellow);
+}
+.project-text p { margin: 0; }
+.project-text p + p { margin-top: 0.4rem; }
+
+/* Links to a project's date */
+.project-date, .project-link {
+  color: var(--yellow);
+  text-decoration: none;
+}
+.project-link:hover { text-decoration: underline wavy; text-underline-offset: 4px; }
+
+
+/* ---------- Clickable project stamps ---------- */
+
+/* A stamp that opens a pop-up is a <button>. Clear the browser's default button
+   look (grey box, border, centred text) so only the stamp design shows. */
+button.stamp {
+  display: block;
+  width: 100%;
+  border: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.25);
+}
+/* Inside a button the photo is a <span>, which is inline by default;
+   make it a block so it keeps its 4:3 shape */
+.stamp-photo {
+  display: block;
+  position: relative;
+}
+
+/* Hovering (or tabbing to) the stamp opens it out a little, and lifts it
+   above the lily pads so nothing covers it while it's playing */
+button.stamp:hover,
+button.stamp:focus-visible {
+  transform: scale(1.1);
+  z-index: 3;
+}
+button.stamp:focus-visible {
+  outline: 3px solid var(--yellow);
+  outline-offset: 4px;
+}
+
+/* The preview video fills the photo window, hidden until it actually starts
+   playing (so a missing video file just leaves the plain window showing) */
+.stamp-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.stamp-video.is-playing { opacity: 1; }
+
+/* ---------- Project pop-up ---------- */
+
+/* The pop-up box: two thirds of the screen's width, centred left to right,
+   and the full height of the screen from top to bottom.
+   100dvh is the screen's height, adjusted on phones for the address bar
+   showing or hiding; 100vh on the line before is the fallback for older browsers.
+   margin-block: 0 removes the browser's automatic gap above and below. */
+.project-dialog {
+  width: 66vw;
+  height: 100vh;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  margin-block: 0;
+  padding: 0;
+  /* It touches the top and bottom of the screen, so the yellow border and
+     rounded corners only appear on the left and right sides */
+  border: 0 solid var(--stamp-yellow);
+  border-inline-width: 3px;
+  border-radius: 0;
+  background: #1c3f24;
+  color: var(--cream);
+  /* All the text inside uses Tommy; the headings set their own title font,
+     so they keep it */
+  font-family: var(--font-popup);
+  overflow: hidden;
+}
+
+/* Everything behind the pop-up is dimmed and softly blurred */
+.project-dialog::backdrop {
+  background: rgba(10, 25, 14, 0.6);
+  backdrop-filter: blur(3px);
+}
+
+/* The pop-up eases in, rising slightly as it appears */
+.project-dialog[open] {
+  animation: dialog-in 0.8s ease;
+}
+@keyframes dialog-in {
+  from { opacity: 0; transform: translateY(14px) scale(0.97); }
+}
+
+/* The inside of the pop-up scrolls on its own. overscroll-behavior stops the
+   page behind from scrolling when you reach the end of the pop-up. */
+.project-dialog-body {
+  height: 100%;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: clamp(1.5rem, 4vw, 3rem);
+}
+
+.project-dialog h2 {
+  margin: 0 0 0.5rem;
+  font-family: var(--font-title);
+  font-weight: normal;
+  font-size: clamp(2rem, 4vw, 3.25rem);
+  color: var(--title-tan);
+}
+.project-dialog h3 {
+  margin: 0 0 0.75rem;
+  font-family: var(--font-title);
+  font-weight: normal;
+  font-size: clamp(1.4rem, 2.4vw, 1.9rem);
+  color: var(--yellow);
+}
+.project-dialog-section { margin-top: 2.5rem; }
+
+/* ---------- Pop-up content (laid out like the portfolio PDF) ---------- */
+
+/* Keep lines of text a comfortable reading length, centred in the box,
+   with a little more space between lines than the cards use */
+.project-dialog-body > * {
+  max-width: 46rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+.project-dialog p,
+.project-dialog li { line-height: 1.6; }
+
+/* Bold sentences (like the survey result) stand out in yellow */
+.project-dialog strong { color: var(--yellow); font-weight: normal; }
+
+/* The one-line summary under the title, a little larger than body text */
+.dialog-lead { font-size: 1.15rem; }
+
+/* Small headings that introduce a list or images ("built with", "design mockups") */
+.dialog-label {
+  margin: 1rem 0 0.4rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  opacity: 0.75;
+}
+
+/* The quick-facts panel under the summary */
+.dialog-facts {
+  margin-top: 1.25rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+}
+.dialog-facts .dialog-label { margin-top: 0; }
+
+/* "built with" tools as a plain bulleted list, with yellow bullets to match
+   the numbers in the features list */
+.dialog-built {
+  margin: 0 0 0.75rem;
+  padding-left: 1.4rem;
+}
+.dialog-built li { margin-bottom: 0.15rem; }
+.dialog-built li::marker { color: var(--yellow); }
+
+/* The "view the code on github" link under the title, styled as a yellow
+   pill-shaped button so it stands out as the main thing to click */
+.dialog-github-row { margin: 0.25rem 0 1.25rem; }
+.dialog-github {
+  display: inline-block;
+  padding: 0.55rem 1.2rem;
+  border-radius: 999px;
+  background: var(--yellow);
+  color: #1c3f24;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: transform 0.15s ease, background-color 0.15s ease;
+}
+/* On hover it lifts slightly and turns a lighter yellow */
+.dialog-github:hover {
+  background: #f7d27e;
+  transform: translateY(-2px);
+}
+/* A visible ring when reached with the Tab key */
+.dialog-github:focus-visible {
+  outline: 3px solid var(--cream);
+  outline-offset: 3px;
+}
+
+/* "built for a real client!" as an outlined label: yellow border and text,
+   no fill. Only the solid yellow GitHub button looks clickable, so this reads
+   as information rather than something to press. */
+.dialog-badge {
+  display: inline-block;
+  margin: 0 0 0.5rem;
+  padding: 0.2rem 0.75rem;
+  background: transparent;
+  color: var(--yellow);
+}
+
+/* The numbered features: the feature name sits in yellow at the start of each line */
+.dialog-features { padding-left: 1.4rem; }
+.dialog-features li { margin-bottom: 0.5rem; }
+.dialog-features li::marker { color: var(--yellow); }
+
+/* Images (and their placeholders) with an optional caption underneath */
+.dialog-figure { margin: 1.5rem auto; }
+.dialog-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+.dialog-figure figcaption {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  text-align: center;
+  opacity: 0.75;
+}
+
+/* Placeholder box shown until a real image is added: same shape as a
+   screenshot, dashed outline, and its name written in the middle */
+.figure-placeholder {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 16 / 10;
+  border: 2px dashed rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+/* The big "gif of it running" at the top is a bit more noticeable */
+.dialog-figure--hero { margin-top: 1rem; }
+
+/* The four design mockups in a 2 x 2 grid (one column on phones, below) */
+.dialog-gallery {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+.dialog-gallery .dialog-figure { margin: 0; }
+
+/* Lists inside lists ("future improvements") are slightly smaller and dimmer */
+.project-dialog ul ul {
+  font-size: 0.92em;
+  opacity: 0.85;
+}
+
+/* The closing note at the very bottom */
+.dialog-footnote {
+  margin-top: 2.5rem;
+  font-size: 0.85rem;
+  text-align: center;
+  opacity: 0.6;
+}
+
+/* The little form holding the × sticks to the top of the box while the content
+   scrolls underneath. It has no height of its own, so it doesn't push the title
+   down, and it spans the full width so the × sits in the box's right corner. */
+.project-dialog-body > form {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  height: 0;
+  max-width: none;
+}
+
+/* The × button itself, in the top-right corner */
+.project-dialog-close {
+  float: right;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 0;
+  border-radius: 50%;
+  background: var(--yellow);
+  color: #1c3f24;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+/* While a pop-up is open, stop the page behind it from scrolling */
+html:has(.project-dialog[open]) { overflow: hidden; }
+
+/* ---------- Enlarged image viewer ---------- */
+
+/* Images in a project pop-up show a magnifying-glass cursor, a hint that
+   clicking makes them bigger */
+.dialog-figure img { cursor: zoom-in; }
+.dialog-figure img:focus-visible {
+  outline: 3px solid var(--yellow);
+  outline-offset: 4px;
+}
+
+/* The viewer box itself is invisible: no border or background, just the
+   picture and caption floating over the darkened page */
+.image-viewer {
+  max-width: none;
+  max-height: none;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--cream);
+  font-family: var(--font-popup);
+  overflow: visible;
+}
+
+/* A darker backdrop than the project pop-up, so the picture stands out */
+.image-viewer::backdrop { background: rgba(5, 15, 8, 0.85); }
+
+.image-viewer figure { margin: 0; }
+
+/* The enlarged picture: up to 1100px wide (or 90% of the screen on smaller
+   screens), and never taller than 85% of the screen. Small pictures are scaled
+   up to that size, so every image opens bigger than it was. object-fit: contain
+   keeps tall pictures (like the UML diagrams) in proportion instead of squashing them. */
+.image-viewer-img {
+  display: block;
+  width: min(90vw, 1100px);
+  height: auto;
+  max-height: 85vh;
+  object-fit: contain;
+  border-radius: 10px;
+}
+
+/* The caption under the enlarged picture (hidden when the image has none) */
+.image-viewer-caption {
+  margin-top: 0.75rem;
+  text-align: center;
+  font-size: 0.95rem;
+}
+.image-viewer-caption:empty { display: none; }
+
+/* The × sits just off the top-right corner of the picture */
+.image-viewer-close {
+  position: absolute;
+  top: -1rem;
+  right: -1rem;
+  z-index: 1;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 0;
+  border-radius: 50%;
+  background: var(--yellow);
+  color: #1c3f24;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+/* The picture grows in from slightly smaller as it opens */
+.image-viewer[open] { animation: viewer-in 0.25s ease; }
+@keyframes viewer-in {
+  from { opacity: 0; transform: scale(0.94); }
+}
+
+@media (max-width: 760px) {
+  .project-row { grid-template-columns: 1fr; row-gap: 1.5rem; padding: 1.5rem 0; }
+}
+@media (max-width: 420px) {
+  .project { grid-template-columns: 1fr; }
+}
+
+/* On phones two thirds of the screen is cramped, so the pop-up uses most of its
+   width (it already fills the full height everywhere) */
+@media (max-width: 760px) {
+  .project-dialog { width: 92vw; }
+  .dialog-gallery { grid-template-columns: 1fr; }
+}
+
+/* For people who prefer less motion: no blooming, no growing stamps,
+   and the pop-up simply appears */
+@media (prefers-reduced-motion: reduce) {
+  .deco { transition: none; }
+  button.stamp { transition: none; }
+  .project-dialog[open] { animation: none; }
+  .image-viewer[open] { animation: none; }
+}

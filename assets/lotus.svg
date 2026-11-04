@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 200 150">
+  <defs>
+    <filter id="grain" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch" result="noise"/>
+      <feColorMatrix in="noise" type="saturate" values="0" result="mono"/>
+      <feComposite in="mono" in2="SourceGraphic" operator="in" result="speckle"/>
+      <feBlend in="SourceGraphic" in2="speckle" mode="soft-light"/>
+    </filter>
+    <radialGradient id="pad-fill" cx="30%" cy="70%" r="80%">
+      <stop offset="0" stop-color="#f1ee8c"/>
+      <stop offset="0.45" stop-color="#7cc25a"/>
+      <stop offset="1" stop-color="#2f8a3e"/>
+    </radialGradient>
+    <linearGradient id="petal-fill" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#f8d77c"/>
+      <stop offset="0.45" stop-color="#f4a3a8"/>
+      <stop offset="1" stop-color="#ee7f95"/>
+    </linearGradient>
+    <g id="petal">
+      <path d="M100 130 C70 105 72 55 100 22 C128 55 130 105 100 130 Z" fill="url(#petal-fill)"/>
+      <path d="M100 124 Q98 80 100 34 M100 110 Q88 80 90 50 M100 110 Q112 80 110 50"
+            fill="none" stroke="#b9536c" stroke-width="1" stroke-opacity="0.45"/>
+    </g>
+  </defs>
+  <g filter="url(#grain)">
+    <ellipse cx="100" cy="134" rx="84" ry="14" fill="url(#pad-fill)"/>
+    <use xlink:href="#petal" transform="rotate(-62 100 130)" opacity="0.85"/>
+    <use xlink:href="#petal" transform="rotate(62 100 130)" opacity="0.85"/>
+    <use xlink:href="#petal" transform="rotate(-38 100 130)"/>
+    <use xlink:href="#petal" transform="rotate(38 100 130)"/>
+    <use xlink:href="#petal" transform="rotate(-16 100 130)"/>
+    <use xlink:href="#petal" transform="rotate(16 100 130)"/>
+    <use xlink:href="#petal"/>
+  </g>
+</svg>
