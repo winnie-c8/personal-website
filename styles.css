@@ -363,11 +363,14 @@ html:has(.projects-page) {
 }
 
 /* Stacking inside the pond: vines (0) < stamps (1) < flowers (2) < text (3).
-   The pond is only as tall as the projects, so the page stops scrolling at the
-   bottom of the last frame. The vines-and-flowers layer inside keeps the
-   mockup's taller shape (see .pond-deco), and overflow-y: clip trims whatever
-   of it hangs below the last frame. Sideways nothing is trimmed, so flowers can
-   still hang off the edges of the screen. */
+   The pond has the vine artwork's shape (1332 x 2250), so the page is long
+   enough to scroll through the whole vine and flower animation even with only
+   one project. If the projects ever get taller than that (lots of them, or
+   phones), the pond simply grows to fit them.
+   To make the page stop at the last frame again once there are more projects,
+   remove the aspect-ratio line. overflow-y: clip then trims whatever of the
+   artwork hangs below. Sideways nothing is trimmed, so flowers can still hang
+   off the edges of the screen. */
 .pond {
   position: relative;
   isolation: isolate;
@@ -499,6 +502,23 @@ html:has(.projects-page) {
   grid-template-columns: minmax(0, 2.4fr) minmax(0, 1fr);
   gap: 4%;
   align-items: start;
+}
+
+/* "More projects coming soon" note: the message sits in the middle of a
+   blank stamp, in the same yellow as the project titles.
+   (Both class names are used so this beats the later ".stamp-photo
+   { display: block }" rule for clickable stamps.) */
+.stamp-photo.stamp-note {
+  display: grid;
+  place-items: center;
+  padding: 6%;
+  text-align: center;
+}
+.stamp-note p {
+  margin: 0;
+  font-size: clamp(0.85rem, 1.4vw, 1.15rem);
+  line-height: 1.5;
+  color: var(--yellow);
 }
 
 /* Postage stamp: circles bitten out of the edges, solid inside */
