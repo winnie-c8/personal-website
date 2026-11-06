@@ -344,8 +344,10 @@
     const start = () => {
       if (!video || reduceMotion) return;
       video.currentTime = 0;
+      // Video files take a moment to start. If stop() ran in the meantime
+      // (the video is paused again), don't show it.
       video.play()
-        .then(() => video.classList.add("is-playing"))
+        .then(() => { if (!video.paused) video.classList.add("is-playing"); })
         .catch(() => {});
     };
 
@@ -365,9 +367,26 @@
     // Clicking the stamp stops the preview and opens its pop-up.
     // showModal() centres it, dims the page behind, and lets Esc close it.
     if (!dialog) return;
+    // The big video inside the pop-up (if it has one)
+    const bigVideo = dialog.querySelector(".dialog-video");
     stamp.addEventListener("click", () => {
       stop();
       dialog.showModal();
+      // Play the pop-up's video from the start. Like the stamp, quietly do
+      // nothing if the file is missing, and skip it for reduced motion.
+      if (bigVideo && !reduceMotion) {
+        bigVideo.currentTime = 0;
+        bigVideo.play().catch(() => {});
+      }
+    });
+    // However the pop-up closes (×, Esc, clicking outside), pause its video
+    // so it isn't playing unseen in the background.
+    // Closing also hands keyboard focus back to the stamp, which counts as
+    // focusing it and would start the hover preview again. This event runs
+    // after that, so stop() switches the preview back off.
+    dialog.addEventListener("close", () => {
+      if (bigVideo) bigVideo.pause();
+      stop();
     });
   });
 

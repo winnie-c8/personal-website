@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Projects | Winnie Chen</title>
+  <!-- Browser tab icon (favicon): shows assets/logo.svg next to the page title -->
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body class="page projects-page">
@@ -58,8 +60,10 @@
             <span class="stamp-photo">
               <!-- EDIT HERE - PREVIEW VIDEO: put your animation's file path in the <source> line
                    and remove the comment marks around it. It plays on hover, muted and looping. -->
-              <video class="stamp-video" muted loop playsinline preload="none" aria-hidden="true">
-                <!-- <source src="assets/focus-cat-preview.mp4" type="video/mp4"> -->
+                <!-- stamp-crop hides the window's grey title bar (see styles.css) -->
+                <img class="stamp-crop" src="assets/focus-cat/preview.png" alt="Focus Cat main menu screen" width="1953" height="1077">
+                <video class="stamp-video" muted loop playsinline preload="none" aria-hidden="true">
+                <source src="assets/focus-cat/focus-cat-preview.mp4" type="video/mp4">
               </video>
             </span>
           </button>
@@ -167,9 +171,16 @@
       <p class="dialog-github-row">
         <a class="dialog-github" href="https://github.com/winnie-c8/Focus-Cat" target="_blank" rel="noopener">view the code on github ↗</a>
       </p>
+      <!-- The same preview video as the stamp, shown big. It starts from the
+           beginning each time the pop-up opens and pauses when it closes (script.js).
+           The still screenshot (poster) shows until the video starts.
+           "controls" adds the browser's play/pause button and a timeline
+           you can drag back (or forward) through. -->
       <figure class="dialog-figure dialog-figure--hero">
-        <span class="figure-placeholder">gif of it running</span>
-        <!-- <img src="assets/focus-cat/running.gif" alt="Focus Cat running: the timer counting down in the cat's room"> -->
+        <video class="dialog-video" controls muted loop playsinline preload="none"
+               poster="assets/focus-cat/preview.png" aria-label="Focus Cat running">
+          <source src="assets/focus-cat/focus-cat-preview.mp4" type="video/mp4">
+        </video>
       </figure>
       <p class="dialog-lead">a cozy pomodoro app where every minute focused buys you something new to decorate your cat's room.</p>
 

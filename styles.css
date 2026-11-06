@@ -514,8 +514,11 @@ html:has(.projects-page) {
       50% / calc(100% - 3 * var(--r)) calc(100% - 3 * var(--r));
 }
 
+/* Every stamp's picture window has the same wide shape as the Focus Cat
+   screen (1917 × 1028 pixels once its title bar is cut off), so a whole
+   app screenshot fits without losing its sides */
 .stamp-photo {
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 1917 / 1028;
   background: #24502e;
   overflow: hidden;
 }
@@ -524,6 +527,19 @@ html:has(.projects-page) {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+/* Screenshot of a desktop window: the picture is made a bit bigger than the
+   frame and slid up and left, so the grey title bar (top 49px) and the black
+   strip (left 36px) fall outside the frame and get hidden.
+   The numbers come from the image: 1953 × 1077 in total, 1917 × 1028 of app. */
+.stamp-photo img.stamp-crop {
+  position: absolute;
+  max-width: none;
+  width: calc(1953 / 1917 * 100%);    /* full image width vs. the app part */
+  height: calc(1077 / 1028 * 100%);   /* full image height vs. the app part */
+  left: calc(-36 / 1917 * 100%);      /* slide left past the black strip */
+  top: calc(-49 / 1028 * 100%);       /* slide up past the grey title bar */
 }
 
 .project-text {
@@ -759,6 +775,15 @@ button.stamp:focus-visible {
   font-size: 0.85rem;
   text-align: center;
   opacity: 0.75;
+}
+
+/* The big preview video at the top of the pop-up: full width of the text
+   column, keeping its own shape, with the same rounded corners as the images */
+.dialog-video {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
 }
 
 /* Placeholder box shown until a real image is added: same shape as a
