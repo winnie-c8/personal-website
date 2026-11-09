@@ -744,7 +744,14 @@ button.stamp:focus-visible {
 
 /* The "view the code on github" link under the title, styled as a yellow
    pill-shaped button so it stands out as the main thing to click */
-.dialog-github-row { margin: 0.25rem 0 1.25rem; }
+/* The row can hold more than one button: they sit side by side with a small
+   gap, and wrap onto a second line if the pop-up is too narrow */
+.dialog-github-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin: 0.25rem 0 1.25rem;
+}
 .dialog-github {
   display: inline-block;
   padding: 0.55rem 1.2rem;
@@ -775,6 +782,27 @@ button.stamp:focus-visible {
   padding: 0.2rem 0.75rem;
   background: transparent;
   color: var(--yellow);
+}
+
+/* Headline facts ("3rd place", "built in 7h") as a row of badges: a yellow
+   border around a faint yellow tint. They stand out, but the see-through fill
+   keeps them looking different from the solid yellow buttons you can click.
+   margin-block only sets top and bottom, so the row stays lined up with the text. */
+.dialog-highlights {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-block: 1rem 0;
+  padding: 0;
+  list-style: none;
+}
+.dialog-highlights li {
+  padding: 0.35rem 0.95rem;
+  border: 1.5px solid var(--yellow);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--yellow) 16%, transparent);
+  color: var(--yellow);
+  font-size: 1rem;
 }
 
 /* The numbered features: the feature name sits in yellow at the start of each line */
@@ -832,8 +860,8 @@ button.stamp:focus-visible {
 
 /* Lists inside lists ("future improvements") are slightly smaller and dimmer */
 .project-dialog ul ul {
-  font-size: 0.92em;
-  opacity: 0.85;
+  font-size: 0.95em;
+  opacity: 0.9;
 }
 
 /* The closing note at the very bottom */

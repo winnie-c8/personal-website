@@ -73,15 +73,20 @@
             <p class="projects-date">sep 2025 - april 2026</p>
           </div>
         </article>
-        <!-- "More coming soon" note, written inside a blank stamp so it matches the
-             frames. When you add a real project, replace this <article> with one
-             like Focus Cat's above. The old grid of placeholder frames is saved
-             in git on the "projects-grid" branch. -->
-        <article class="project project--note">
-          <div class="stamp">
-            <div class="stamp-photo stamp-note">
-              <p>more projects coming soon!<br>for now, keep scrolling and watch the flowers grow :)</p>
-            </div>
+        <!-- homeBuddy: a stamp button like Focus Cat's. Clicking it opens the pop-up
+             with the id "project-homebuddy" below. It has no <video> yet, so hovering
+             just opens the frame out a little. -->
+        <article class="project">
+          <button class="stamp" type="button" data-dialog="project-homebuddy"
+                  aria-label="Open details for homeBuddy">
+            <span class="stamp-photo">
+              <img src="assets/homebuddy/preview.png" alt="homeBuddy sign-in screen with patient, family and care team options" width="1371" height="735">
+            </span>
+          </button>
+          <div class="project-text">
+            <h2>homeBuddy</h2>
+            <p>helping seniors age at home instead of in care facilities.</p>
+            <p class="projects-date">nov 2026</p>
           </div>
         </article>
       </section>
@@ -92,8 +97,15 @@
         <article class="project">
           <div class="stamp"><div class="stamp-photo"></div></div>
         </article>
-        <article class="project">
-          <div class="stamp"><div class="stamp-photo"></div></div>
+        <!-- "More coming soon" note, written inside a blank stamp so it matches the
+             frames. The old grid of placeholder frames is saved in git on the
+             "projects-grid" branch. -->
+        <article class="project project--note">
+          <div class="stamp">
+            <div class="stamp-photo stamp-note">
+              <p>more projects coming soon!<br>for now, keep scrolling and watch the flowers grow :)</p>
+            </div>
+          </div>
         </article>
       </section>
       <section class="project-row">
@@ -271,6 +283,99 @@
       </section>
 
       <p class="dialog-footnote">full documentation available on request</p>
+    </div>
+  </dialog>
+
+  <!-- homeBuddy pop-up: opens from the stamp with data-dialog="project-homebuddy".
+       It uses the same layout as Focus Cat's, with the content from the project's README. -->
+  <dialog class="project-dialog" id="project-homebuddy" aria-labelledby="homebuddy-title">
+    <div class="project-dialog-body">
+      <!-- method="dialog" makes this button close the pop-up without any JavaScript -->
+      <form method="dialog">
+        <button class="project-dialog-close" aria-label="Close">×</button>
+      </form>
+
+      <!-- Title of the pop-up -->
+      <h2 id="homebuddy-title">homeBuddy</h2>
+      <!-- Links: try the live app, read the code, see the Devpost page.
+           EDIT HERE - DEVPOST: put your Devpost address in the href and remove the
+           comment marks around that line. It's hidden for now so there's no dead link. -->
+      <p class="dialog-github-row">
+        <a class="dialog-github" href="https://codebase-launchpad-studio.lovable.app/" target="_blank" rel="noopener">test it out! ↗</a>
+        <a class="dialog-github" href="https://github.com/winnie-c8/homeBuddy" target="_blank" rel="noopener">github ↗</a>
+        <a class="dialog-github" href="https://devpost.com/software/homebuddy-os531c?_gl=1*qe0tq2*_gcl_au*NDY2ODIwNjMuMTc5MTkzNjIwMA..*_ga*MTY0MzIyNzY1OC4xNzkxOTM2MjAx*_ga_0YHJK3Y10M*czE3OTQxODU0ODEkbzEwJGcxJHQxNzk0MTg3MjI4JGo1OCRsMCRoMA.." target="_blank" rel="noopener">devpost ↗</a>
+      </p>
+
+      <!-- EDIT HERE - VIDEO: this screenshot stands in until the video exists. Swap the
+           <img> for the line below. The class dialog-video makes it play when the
+           pop-up opens and pause when it closes, like Focus Cat's (script.js).
+           <video class="dialog-video" controls muted loop playsinline preload="none" poster="assets/homebuddy/preview.png" aria-label="homeBuddy running"><source src="assets/homebuddy/homebuddy-demo.mp4" type="video/mp4"></video> -->
+      <figure class="dialog-figure dialog-figure--hero">
+        <img src="assets/homebuddy/preview.png" alt="homeBuddy sign-in screen with patient, family and care team options">
+      </figure>
+
+      <!-- One-line summary, then the two headline facts -->
+      <p class="dialog-lead">bringing the reassurance of a nursing home's daily check-in to seniors aging at home, through one simple voice call a day.</p>
+      <!-- The two headline facts, shown as badges -->
+      <ul class="dialog-highlights">
+        <li>3rd place at WiE Hackathon 2026</li>
+        <li>built in 7h</li>
+      </ul>
+
+      <!-- What it's built with: the same boxed panel as Focus Cat's -->
+      <div class="dialog-facts">
+        <p class="dialog-label">built with</p>
+        <ul class="dialog-built">
+          <li>React + TypeScript (TanStack Start)</li>
+          <li>Tailwind CSS</li>
+          <li>Google Gemini Live API (live voice)</li>
+          <li>Supabase</li>
+          <li>Figma (web design)</li>
+        </ul>
+      </div>
+
+      <!-- Why the app was needed -->
+      <section class="project-dialog-section">
+        <h3>the problem</h3>
+        <p>Seniors living independently often face slow-building health issues like missed meals, growing fatigue, dehydration or skipped medications. These go unnoticed until they end in an emergency room visit. Existing health portals don't help much: they expect seniors to type, log in and navigate complex screens, which many find frustrating or inaccessible.</p>
+      </section>
+
+      <!-- What it does. The main features are bold; the jot notes under each one
+           add detail from the project's README. -->
+      <section class="project-dialog-section">
+        <h3>features</h3>
+        <ul class="dialog-built">
+          <li><strong>voice check in</strong>
+            <ul>
+              <li>senior has a daily voice call with AI, who asks the care team's questions</li>
+              <li>live transcript during the call, then an easy-to-read summary</li>
+            </ul>
+          </li>
+          <li><strong>3 logins - patient, family, care team</strong>
+            <ul>
+              <li><strong>patient</strong> - just talk: no typing and no menus to navigate</li>
+              <li><strong>family</strong> - read only view of the patient’s details
+                <ul>
+                  <li>today's check-in status and care team notes</li>
+                  <li>securely linked to a senior through a unique invite code</li>
+                </ul>
+              </li>
+              <li><strong>care team</strong> - ask &amp; answer questions, update care plan, manage alerts
+                <ul>
+                  <li>overview of all assigned seniors, sorted by alert severity</li>
+                  <li>an alert can only be marked handled once the team logs what they did</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li><strong>accessible design</strong>
+            <ul>
+              <li>high-contrast colours and warm, friendly illustrations</li>
+              <li>Atkinson Hyperlegible type, designed for readability by older adults and busy care providers</li>
+            </ul>
+          </li>
+        </ul>
+      </section>
     </div>
   </dialog>
 
