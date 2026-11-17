@@ -1,15 +1,18 @@
 /* ---------- Fonts ----------
    Put your font files in /fonts and update the file names below.
    .woff2 is best; add a .woff line too if you have one. */
+/* font-display: block = while your font is downloading, keep the text invisible
+   (for up to ~3 seconds) instead of flashing a different font and then jumping.
+   The files are preloaded in each page's <head>, so normally it's a split second. */
 @font-face {
-  font-family: "TitleFont";           
+  font-family: "TitleFont";
   src: url("fonts/DarumadropOne-Regular.ttf") format("truetype");
-  font-display: swap;
+  font-display: block;
 }
 @font-face {
   font-family: "TextFont";
   src: url("fonts/Cweyons-Regular.ttf") format("truetype");
-  font-display: swap;
+  font-display: block;
 }
 /* The body text inside the project pop-ups. It's an .otf file,
    so its format is "opentype" rather than "truetype". */
@@ -26,8 +29,10 @@
   --cream: #ffffff;
   --yellow: #f2c14e;
 
-  --font-title: "TitleFont", "Comic Sans MS", "Marker Felt", cursive;
-  --font-text: "TextFont", "Comic Sans MS", "Marker Felt", cursive;
+  /* Backup fonts, only used if yours fail to load: chunky rounded ones for titles,
+     neat handwriting ones for text (Windows / Mac / Android in that order) */
+  --font-title: "TitleFont", "Arial Rounded MT Bold", "Segoe UI Black", "Chalkboard SE", system-ui, sans-serif;
+  --font-text: "TextFont", "Segoe Print", "Bradley Hand", "Chalkboard SE", system-ui, cursive;
   /* If Tommy can't load, fall back to a plain, rounded-ish system font */
   --font-popup: "PopupFont", "Trebuchet MS", system-ui, sans-serif;
 }
@@ -63,13 +68,15 @@ a:focus-visible {
   isolation: isolate;
 }
 
-/* Background image. Slightly oversized so it can drift without showing edges. */
+/* Background image. Slightly oversized so it can drift without showing edges.
+   It's a flat WebP picture of background1.svg — the SVG's blur/noise filters were
+   too slow to redraw on hover. If you change the art, re-export it as an image. */
 .hero-bg {
   position: absolute;
   inset: -1.5%;
   z-index: -2;
   background:
-    url("assets/background1.svg") 0 0 / 100% 100% no-repeat,
+    url("assets/background1.webp") 0 0 / 100% 100% no-repeat,
     radial-gradient(circle at 30% 20%, #9bc384, var(--green-mid) 60%, #4d7a45);
   will-change: transform;
 }
@@ -241,15 +248,17 @@ a:focus-visible {
   width: clamp(64px, 9vw, 104px);
 }
 
-/* The rough paper blob behind the icon */
+/* The rough paper blob behind the icon. Its shape comes from icon-blob.png
+   (a pre-drawn rough square), so the browser doesn't have to run a noise filter
+   on every frame of the hover animation. The colour still comes from --blob. */
 .icon-link::before {
   content: "";
   position: absolute;
   inset: -20%;
   z-index: -1;
   background: var(--blob);
-  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><filter id='r' x='-20%25' y='-20%25' width='140%25' height='140%25'><feTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='3' seed='4' result='n'/><feDisplacementMap in='SourceGraphic' in2='n' scale='12' xChannelSelector='R' yChannelSelector='G'/></filter><rect x='14' y='14' width='72' height='72' rx='8' filter='url(%23r)'/></svg>") center / 100% 100% no-repeat;
-          mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><filter id='r' x='-20%25' y='-20%25' width='140%25' height='140%25'><feTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='3' seed='4' result='n'/><feDisplacementMap in='SourceGraphic' in2='n' scale='12' xChannelSelector='R' yChannelSelector='G'/></filter><rect x='14' y='14' width='72' height='72' rx='8' filter='url(%23r)'/></svg>") center / 100% 100% no-repeat;
+  -webkit-mask: url("assets/icon-blob.png") center / 100% 100% no-repeat;
+          mask: url("assets/icon-blob.png") center / 100% 100% no-repeat;
   opacity: 0;
   transform: scale(0.8) rotate(var(--rot, 0deg));
   transition: opacity 0.2s ease, transform 0.25s ease;
@@ -993,4 +1002,229 @@ html:has(.project-dialog[open]) { overflow: hidden; }
   button.stamp { transition: none; }
   .project-dialog[open] { animation: none; }
   .image-viewer[open] { animation: none; }
+}
+
+/* ---------- About page ---------- */
+
+/* Colours from the Figma "about me" styles */
+.about-page {
+  --about-cream: #fbefc8;
+  --about-light: #bada90;
+  --about-mid: #62944b;
+  --about-dark: #0e4d0d;
+  --about-yellow: #f5dd43;
+  background: var(--about-cream);
+  color: var(--about-dark);
+  overflow-x: hidden;
+}
+
+/* "back home" link floats over the top-left corner of the canvas */
+.about-page .back {
+  position: absolute;
+  z-index: 5;
+  color: var(--about-dark);
+}
+
+/* The canvas: as wide as the screen, and the same shape as the Figma frame (1532 × 1800).
+   --u is "one Figma pixel" at the current screen width, so calc(var(--u) * 100) = 100 Figma px. */
+.about-canvas {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1532 / 1800;
+  container-type: inline-size;
+  overflow: hidden;
+  --u: calc(100cqw / 1532);
+}
+
+/* Anything with --x / --y (and optionally --w / --h / --rot) is placed using the Figma numbers */
+.about-canvas [style*="--x"] {
+  position: absolute;
+  left: calc(var(--x) * var(--u));
+  top: calc(var(--y) * var(--u));
+}
+.about-canvas [style*="--w"] { width: calc(var(--w) * var(--u)); }
+.about-canvas [style*="--h"] { height: calc(var(--h) * var(--u)); }
+
+/* Background layer holds the blocks, dots and spirals behind the content */
+.about-deco { position: absolute; inset: 0; pointer-events: none; }
+
+/* Decorative images; --rot spins one, .flip mirrors one left-to-right */
+.about-canvas .art { display: block; transform: rotate(var(--rot, 0deg)); }
+.about-canvas .art.flip { transform: scaleX(-1); }
+
+/* Solid colour blocks; .torn wobbles the edges using the SVG filter in about.html */
+.block--light { background: var(--about-light); }
+.block--dark  { background: var(--about-dark); }
+.torn { filter: url(#torn); }
+
+/* Dot patterns: a small circle repeated on a grid. Change --dot to recolour. */
+.dots {
+  background-image: radial-gradient(circle, var(--dot) 32%, transparent 36%);
+  background-size: calc(10 * var(--u)) calc(10 * var(--u));
+}
+.dots--yellow { --dot: var(--about-yellow); }
+.dots--light  { --dot: var(--about-light); }
+.dots--dark   { --dot: var(--about-dark); }
+
+/* Photo windows: hide whatever spills outside, and place the photo using Figma's crop numbers */
+.about-canvas .crop { overflow: hidden; }
+.about-canvas .crop img { position: absolute; max-width: none; }
+
+/* Big headings ("about me" in dark green, "skills" in yellow) with their soft shadows */
+.about-title {
+  margin: 0;
+  font-family: var(--font-title);
+  font-weight: normal;
+  font-size: calc(100 * var(--u));
+  line-height: 1.66;
+  white-space: nowrap;
+  color: var(--about-dark);
+  text-shadow: calc(4 * var(--u)) calc(6 * var(--u)) calc(4 * var(--u)) #e6c761;
+}
+.about-title--skills {
+  color: var(--about-yellow);
+  text-shadow: calc(4 * var(--u)) calc(4 * var(--u)) calc(4 * var(--u)) #91720c;
+}
+
+/* Bio paragraph */
+.about-bio {
+  margin: 0;
+  font-family: var(--font-text);
+  font-size: calc(20 * var(--u));
+  line-height: 1.2;
+}
+
+/* Trait list next to the dark square, right-aligned */
+.about-traits {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  text-align: right;
+  font-size: calc(30 * var(--u));
+  line-height: calc(50 * var(--u));
+}
+
+/* Skills: 5 columns of 172px squares, 256px apart, rows 280px apart */
+.skills-grid {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(5, calc(172 * var(--u)));
+  column-gap: calc(84 * var(--u));
+  row-gap: calc(50 * var(--u));
+  font-size: calc(30 * var(--u));
+  line-height: calc(50 * var(--u));
+  text-align: center;
+}
+/* Grey square; the skill name sits near its bottom edge */
+.skill-icon {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  aspect-ratio: 1;
+  padding-bottom: calc(12 * var(--u));
+  background: #d9d9d9;
+}
+/* "1year" line under each square (kept the same height even when empty so rows line up) */
+.skill-years { display: block; min-height: calc(50 * var(--u)); padding-top: calc(8 * var(--u)); }
+
+/* ---------- Leaf curtain (page transition, see curtain.js) ----------
+   A full-screen stream of falling leaves. Hidden normally. "is-on" shows it and
+   keeps the leaves falling; "is-shaded" fades in the solid green behind them. */
+.leaf-curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  overflow: hidden;
+  pointer-events: none;
+  visibility: hidden;
+}
+.leaf-curtain.is-on { visibility: visible; }
+
+/* The backdrop behind the falling leaves: a thick pile of leaves (a 600px tile that
+   repeats seamlessly, assets/leaves/leaf-pile.webp) so no plain background ever
+   shows between them. It's one tile taller than the screen and slides down by one
+   tile on a loop, so it looks like a slower layer of leaves falling further back.
+   It fades in/out smoothly. */
+.leaf-curtain::before {
+  content: "";
+  position: absolute;
+  inset: -600px 0 0 0;
+  background: #24562a url("assets/leaves/leaf-pile.webp") 0 0 / 600px 600px repeat;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  animation: pile-fall 2.4s linear calc(0ms - var(--elapsed, 0ms)) infinite;
+  will-change: transform;
+}
+@keyframes pile-fall {
+  from { transform: translateY(0); }
+  to   { transform: translateY(600px); }
+}
+.leaf-curtain.is-shaded { pointer-events: auto; }  /* block clicks while covered */
+.leaf-curtain.is-shaded::before { opacity: 1; }
+.leaf-curtain.no-fade::before { transition: none; }  /* projects page starts already covered */
+
+/* One leaf: a grainy leaf/petal picture from assets/leaves, drawn in the same style
+   as the lily pads and vines. Column, width, tilt and picture come from curtain.js
+   (the pictures are 100 x 160 in shape, hence the 1.6 height). It waits just above
+   the top of the screen until it starts falling. */
+.leaf {
+  position: absolute;
+  left: var(--x);
+  top: 0;
+  width: var(--s);
+  height: calc(var(--s) * 1.6);
+  margin-left: calc(var(--s) / -2);
+  background: var(--img) center / contain no-repeat;
+  transform: translateY(-110%) rotate(var(--r));
+}
+
+/* Falling: each leaf drops from above the screen to below it at a steady speed,
+   spinning and drifting sideways a little, over and over. --elapsed (set by
+   curtain.js) winds it forward so the fall carries on across the page change. */
+.leaf-curtain.is-on .leaf {
+  animation: leaf-fall var(--dur) linear calc(var(--d) - var(--elapsed, 0ms)) infinite both;
+}
+@keyframes leaf-fall {
+  from { transform: translate(0, -110%) rotate(var(--r)); }
+  to   { transform: translate(var(--drift), 100vh) rotate(calc(var(--r) + var(--spin))); }
+}
+
+/* Flowers and lily pads stay closed until the leaves clear, then the ones
+   on screen bloom open with their usual animation */
+html.is-loading .deco.is-in {
+  opacity: 0;
+  transform: scale(0.4) rotate(calc(var(--rot, 0deg) - 25deg));
+}
+
+/* ---------- Projects page: contact icons ---------- */
+/* Column of icons stuck to the bottom-right of the screen, even while scrolling */
+.contact-icons {
+  position: fixed;
+  right: clamp(1rem, 2.5vw, 2rem);
+  bottom: clamp(1rem, 2.5vw, 2rem);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;   /* stack them top to bottom */
+  gap: 0;                   /* no extra space; the click areas below already space them out */
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Just the icon, no circle behind it. The icon's lines use the text colour,
+   so changing color on hover turns the outline yellow */
+.contact-icons a {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;            /* keeps a comfy click area around the icon */
+  height: 2.1rem;            /* shorter click area = icons sit closer together */
+  color: var(--cream);
+  transition: color 0.2s ease;
+}
+.contact-icons a:hover,
+.contact-icons a:focus-visible {
+  color: var(--yellow);
+  outline: none;
 }
