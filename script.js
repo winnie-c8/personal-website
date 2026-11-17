@@ -462,9 +462,9 @@ let vinesDone = false;
   });
 })();
 
-// Projects page: uncover the page once it's ready.
-// projects.html starts with class "is-loading" on <html> and the leaf curtain covering it.
-// Once your fonts and the vine drawing are both ready, the leaves fall away and the class goes.
+// Projects page: once it's ready, let the flowers bloom.
+// projects.html starts with class "is-loading" on <html>, which keeps the flowers closed.
+// Once your fonts and the vine drawing are both ready, the class is removed.
 (function () {
   const root = document.documentElement;
   if (!root.classList.contains("is-loading")) return;
@@ -482,7 +482,6 @@ let vinesDone = false;
   // The extra animation frame lets the vines draw their hidden starting state first.
   Promise.race([Promise.all([document.fonts.ready, vinesReady]), tooLong])
     .then(() => requestAnimationFrame(() => {
-      if (window.leafCurtain) window.leafCurtain.reveal();  // leaves fall away (curtain.js)
       root.classList.remove("is-loading");
     }));
 })();

@@ -1129,69 +1129,8 @@ html:has(.project-dialog[open]) { overflow: hidden; }
 /* "1year" line under each square (kept the same height even when empty so rows line up) */
 .skill-years { display: block; min-height: calc(50 * var(--u)); padding-top: calc(8 * var(--u)); }
 
-/* ---------- Leaf curtain (page transition, see curtain.js) ----------
-   A full-screen stream of falling leaves. Hidden normally. "is-on" shows it and
-   keeps the leaves falling; "is-shaded" fades in the solid green behind them. */
-.leaf-curtain {
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
-  overflow: hidden;
-  pointer-events: none;
-  visibility: hidden;
-}
-.leaf-curtain.is-on { visibility: visible; }
-
-/* The backdrop behind the falling leaves: a thick pile of leaves (a 600px tile that
-   repeats seamlessly, assets/leaves/leaf-pile.webp) so no plain background ever
-   shows between them. It's one tile taller than the screen and slides down by one
-   tile on a loop, so it looks like a slower layer of leaves falling further back.
-   It fades in/out smoothly. */
-.leaf-curtain::before {
-  content: "";
-  position: absolute;
-  inset: -600px 0 0 0;
-  background: #24562a url("assets/leaves/leaf-pile.webp") 0 0 / 600px 600px repeat;
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  animation: pile-fall 2.4s linear calc(0ms - var(--elapsed, 0ms)) infinite;
-  will-change: transform;
-}
-@keyframes pile-fall {
-  from { transform: translateY(0); }
-  to   { transform: translateY(600px); }
-}
-.leaf-curtain.is-shaded { pointer-events: auto; }  /* block clicks while covered */
-.leaf-curtain.is-shaded::before { opacity: 1; }
-.leaf-curtain.no-fade::before { transition: none; }  /* projects page starts already covered */
-
-/* One leaf: a grainy leaf/petal picture from assets/leaves, drawn in the same style
-   as the lily pads and vines. Column, width, tilt and picture come from curtain.js
-   (the pictures are 100 x 160 in shape, hence the 1.6 height). It waits just above
-   the top of the screen until it starts falling. */
-.leaf {
-  position: absolute;
-  left: var(--x);
-  top: 0;
-  width: var(--s);
-  height: calc(var(--s) * 1.6);
-  margin-left: calc(var(--s) / -2);
-  background: var(--img) center / contain no-repeat;
-  transform: translateY(-110%) rotate(var(--r));
-}
-
-/* Falling: each leaf drops from above the screen to below it at a steady speed,
-   spinning and drifting sideways a little, over and over. --elapsed (set by
-   curtain.js) winds it forward so the fall carries on across the page change. */
-.leaf-curtain.is-on .leaf {
-  animation: leaf-fall var(--dur) linear calc(var(--d) - var(--elapsed, 0ms)) infinite both;
-}
-@keyframes leaf-fall {
-  from { transform: translate(0, -110%) rotate(var(--r)); }
-  to   { transform: translate(var(--drift), 100vh) rotate(calc(var(--r) + var(--spin))); }
-}
-
-/* Flowers and lily pads stay closed until the leaves clear, then the ones
+/* ---------- Projects page loading ----------
+   Flowers and lily pads stay closed until the page is ready, then the ones
    on screen bloom open with their usual animation */
 html.is-loading .deco.is-in {
   opacity: 0;

@@ -12,21 +12,13 @@
   <link rel="preload" href="fonts/Cweyons-Regular.ttf" as="font" type="font/ttf" crossorigin>
   <link rel="preload" href="assets/projects/vines.svg" as="fetch" crossorigin>
   <link rel="preload" href="assets/projects/vine-guide.svg" as="fetch" crossorigin>
-  <link rel="preload" href="assets/leaves/leaf-pad.png" as="image">
-  <link rel="preload" href="assets/leaves/leaf-vine.png" as="image">
-  <link rel="preload" href="assets/leaves/leaf-deep.png" as="image">
-  <link rel="preload" href="assets/leaves/leaf-slim.png" as="image">
-  <link rel="preload" href="assets/leaves/petal.png" as="image">
-  <link rel="preload" href="assets/leaves/leaf-pile.webp" as="image">
   <link rel="stylesheet" href="styles.css">
-  <!-- Loading state: the page starts covered by the leaf curtain (curtain.js), and
-       script.js makes the leaves fall away once the fonts and vines are ready.
+  <!-- Loading state: keeps the flowers and lily pads closed until the fonts and vines
+       are ready (script.js), so they bloom open once the page is ready.
        This only runs when JavaScript is on, so without JS the page shows normally. -->
   <script>document.documentElement.classList.add("is-loading");</script>
 </head>
 <body class="page projects-page">
-  <!-- Leaf curtain: loaded first so the leaves cover the page before anything else draws -->
-  <script src="curtain.js"></script>
 
   <main class="pond">
     <div class="pond-deco" aria-hidden="true">
