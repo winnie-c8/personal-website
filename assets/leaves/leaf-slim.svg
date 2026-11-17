@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="320" viewBox="0 0 100 160">
+<defs>
+<linearGradient id="f" x1="0.2" y1="1" x2="0.8" y2="0"><stop offset="0" stop-color="#4f9c3d"/><stop offset="1" stop-color="#b5d775"/></linearGradient>
+<filter id="d" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="1.6" seed="3"/><feColorMatrix values="0 0 0 0 0.12  0 0 0 0 0.12  0 0 0 0 0.12  0 0 0 10 -5.7"/><feComposite in2="SourceGraphic" operator="in"/></filter>
+<filter id="l" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="1.6" seed="9"/><feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 0.6  0 0 0 10 -5.9"/><feComposite in2="SourceGraphic" operator="in"/></filter>
+<clipPath id="c"><path d="M54 3 C77 38 82 88 64 128 C58 142 51 151 46 158 C38 140 21 112 23 76 C25 44 38 19 54 3Z"/></clipPath></defs>
+<path d="M54 3 C77 38 82 88 64 128 C58 142 51 151 46 158 C38 140 21 112 23 76 C25 44 38 19 54 3Z" fill="url(#f)"/>
+<path d="M46 158 C50 120 58 70 54 8 M49 125 C40 116 32 108 26 98 M52 95 C60 86 68 78 76 70 M54 66 C46 58 38 50 30 40" fill="none" stroke="#e3ea98" stroke-width="1.4" stroke-linecap="round" opacity="0.7" clip-path="url(#c)"/>
+<path d="M54 3 C77 38 82 88 64 128 C58 142 51 151 46 158 C38 140 21 112 23 76 C25 44 38 19 54 3Z" fill="#000" filter="url(#d)" opacity="0.6"/>
+<path d="M54 3 C77 38 82 88 64 128 C58 142 51 151 46 158 C38 140 21 112 23 76 C25 44 38 19 54 3Z" fill="#000" filter="url(#l)" opacity="0.35"/>
+</svg>

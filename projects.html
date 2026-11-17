@@ -6,9 +6,27 @@
   <title>Projects | Winnie Chen</title>
   <!-- Browser tab icon (favicon): shows assets/logo.svg next to the page title -->
   <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+  <!-- Start downloading the fonts and the vine drawing straight away, instead of waiting
+       until the CSS / script asks for them, so the page is ready sooner -->
+  <link rel="preload" href="fonts/DarumadropOne-Regular.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="fonts/Cweyons-Regular.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="assets/projects/vines.svg" as="fetch" crossorigin>
+  <link rel="preload" href="assets/projects/vine-guide.svg" as="fetch" crossorigin>
+  <link rel="preload" href="assets/leaves/leaf-pad.png" as="image">
+  <link rel="preload" href="assets/leaves/leaf-vine.png" as="image">
+  <link rel="preload" href="assets/leaves/leaf-deep.png" as="image">
+  <link rel="preload" href="assets/leaves/leaf-slim.png" as="image">
+  <link rel="preload" href="assets/leaves/petal.png" as="image">
+  <link rel="preload" href="assets/leaves/leaf-pile.webp" as="image">
   <link rel="stylesheet" href="styles.css">
+  <!-- Loading state: the page starts covered by the leaf curtain (curtain.js), and
+       script.js makes the leaves fall away once the fonts and vines are ready.
+       This only runs when JavaScript is on, so without JS the page shows normally. -->
+  <script>document.documentElement.classList.add("is-loading");</script>
 </head>
 <body class="page projects-page">
+  <!-- Leaf curtain: loaded first so the leaves cover the page before anything else draws -->
+  <script src="curtain.js"></script>
 
   <main class="pond">
     <div class="pond-deco" aria-hidden="true">
@@ -16,33 +34,62 @@
            vine (same layer order), drawn from where the vine starts growing to its tip.
            Each vine is uncovered along its guide line as you scroll.
            If the page proportions change, update aspect-ratio on .pond in styles.css. -->
-      <div class="vines" data-src="assets/vines.svg" data-guides="assets/vine-guide.svg"></div>
+      <div class="vines" data-src="assets/projects/vines.svg" data-guides="assets/projects/vine-guide.svg"></div>
 
       <!-- EDIT HERE - YOUR LILY PADS / FLOWERS: swap the src for any image.
            --x / --y place the top-left corner (percent of the page), --w sets the width,
            --rot tilts it. Later lines sit on top, so pads go before the flowers resting on them.
            To hang one off the side of the screen, add class "edge-left" or "edge-right":
            --x then measures from that edge of the screen, and a negative --x pushes it off. -->
-      <img class="deco" src="assets/lilypad1.svg" alt="" style="--x: 70%;   --y: 3.2%;  --w: 28%;">
-      <img class="deco edge-left"  src="assets/lilypad3.svg" alt="" style="--x: 0%; --y: 24%;   --w: 22%;">
-      <img class="deco"            src="assets/lilypad2.svg" alt="" style="--x: 21%;   --y: 18.2%; --w: 23%; --rot: -6deg;">
-      <img class="deco edge-left"  src="assets/flower1.svg"  alt="" style="--x: -3%;   --y: 18%; --w: 25%; --rot: 4deg;">
-      <img class="deco"            src="assets/lilypad2.svg" alt="" style="--x: 25.5%; --y: 36.5%; --w: 22.5%; --rot: 8deg;">
-      <img class="deco edge-right" src="assets/lilypad2.svg" alt="" style="--x: 3%;    --y: 38%;   --w: 24.5%;">
-      <img class="deco edge-right" src="assets/flower2.svg"  alt="" style="--x: 4%;    --y: 28.7%; --w: 26.5%;">
-      <img class="deco edge-left"  src="assets/lilypad3.svg" alt="" style="--x: 0%;    --y: 51%;   --w: 23%;">
-      <img class="deco edge-left"  src="assets/flower2.svg"  alt="" style="--x: -0.5%; --y: 46.9%; --w: 16%;">
-      <img class="deco edge-right" src="assets/lilypad1.svg" alt="" style="--x: 2%;    --y: 51.8%; --w: 24.5%; --rot: 4deg;">
-      <img class="deco"            src="assets/lilypad1.svg" alt="" style="--x: 34.8%; --y: 68.5%; --w: 23%;">
-      <img class="deco"            src="assets/flower1.svg"  alt="" style="--x: 29%;   --y: 62.1%; --w: 28.5%;">
-      <img class="deco edge-left"  src="assets/lilypad2.svg" alt="" style="--x: 0%;    --y: 69.3%; --w: 20.5%; --rot: -8deg;">
-      <img class="deco"            src="assets/lilypad3.svg" alt="" style="--x: 21.4%; --y: 81.5%; --w: 27.5%;">
-      <img class="deco edge-right" src="assets/lilypad3.svg" alt="" style="--x: 2%;    --y: 88.3%; --w: 22.5%;">
-      <img class="deco edge-right" src="assets/flower1.svg"  alt="" style="--x: 1%;    --y: 81.2%; --w: 23%;">
+      <img class="deco" src="assets/projects/lilypad1.svg" alt="" style="--x: 70%;   --y: 3.2%;  --w: 28%;">
+      <img class="deco edge-left"  src="assets/projects/lilypad3.svg" alt="" style="--x: 0%; --y: 24%;   --w: 22%;">
+      <img class="deco"            src="assets/projects/lilypad2.svg" alt="" style="--x: 21%;   --y: 18.2%; --w: 23%; --rot: -6deg;">
+      <img class="deco edge-left"  src="assets/projects/flower1.svg"  alt="" style="--x: -3%;   --y: 18%; --w: 25%; --rot: 4deg;">
+      <img class="deco"            src="assets/projects/lilypad2.svg" alt="" style="--x: 25.5%; --y: 36.5%; --w: 22.5%; --rot: 8deg;">
+      <img class="deco edge-right" src="assets/projects/lilypad2.svg" alt="" style="--x: 3%;    --y: 38%;   --w: 24.5%;">
+      <img class="deco edge-right" src="assets/projects/flower2.svg"  alt="" style="--x: 4%;    --y: 28.7%; --w: 26.5%;">
+      <img class="deco edge-left"  src="assets/projects/lilypad3.svg" alt="" style="--x: 0%;    --y: 51%;   --w: 23%;">
+      <img class="deco edge-left"  src="assets/projects/flower2.svg"  alt="" style="--x: -0.5%; --y: 46.9%; --w: 16%;">
+      <img class="deco edge-right" src="assets/projects/lilypad1.svg" alt="" style="--x: 2%;    --y: 51.8%; --w: 24.5%; --rot: 4deg;">
+      <img class="deco"            src="assets/projects/lilypad1.svg" alt="" style="--x: 34.8%; --y: 68.5%; --w: 23%;">
+      <img class="deco"            src="assets/projects/flower1.svg"  alt="" style="--x: 29%;   --y: 62.1%; --w: 28.5%;">
+      <img class="deco edge-left"  src="assets/projects/lilypad2.svg" alt="" style="--x: 0%;    --y: 69.3%; --w: 20.5%; --rot: -8deg;">
+      <img class="deco"            src="assets/projects/lilypad3.svg" alt="" style="--x: 21.4%; --y: 81.5%; --w: 27.5%;">
+      <img class="deco edge-right" src="assets/projects/lilypad3.svg" alt="" style="--x: 2%;    --y: 88.3%; --w: 22.5%;">
+      <img class="deco edge-right" src="assets/projects/flower1.svg"  alt="" style="--x: 1%;    --y: 81.2%; --w: 23%;">
     </div>
 
     <div class="pond-inner">
       <a class="back" href="index.html">back home</a>
+      <!-- Contact icons: a column of 3 icon links pinned to the bottom-right corner
+           of the screen (stays there while you scroll). The aria-label is the name
+           screen readers say, since there's no visible text. -->
+      <ul class="contact-icons">
+        <li>
+          <a href="https://www.linkedin.com/in/winniechen3" aria-label="linkedin" target="_blank" rel="noopener noreferrer">
+            <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+              <rect x="2" y="9" width="4" height="12"/>
+              <circle cx="4" cy="4" r="2"/>
+            </svg>
+          </a>
+        </li>
+        <li>
+          <a href="https://github.com/winnie-c8" aria-label="github" target="_blank" rel="noopener noreferrer">
+            <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+            </svg>
+          </a>
+        </li>
+        <li>
+          <a href="mailto:winnie.chen005@gmail.com" aria-label="email">
+            <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+          </a>
+        </li>
+      </ul>
 
       <header class="projects-header">
         <h1>projects</h1>
@@ -61,9 +108,9 @@
               <!-- EDIT HERE - PREVIEW VIDEO: put your animation's file path in the <source> line
                    and remove the comment marks around it. It plays on hover, muted and looping. -->
                 <!-- stamp-crop hides the window's grey title bar (see styles.css) -->
-                <img class="stamp-crop" src="assets/focus-cat/preview.png" alt="Focus Cat main menu screen" width="1953" height="1077">
+                <img class="stamp-crop" src="assets/projects/focus-cat/preview.png" alt="Focus Cat main menu screen" width="1953" height="1077">
                 <video class="stamp-video" muted loop playsinline preload="none" aria-hidden="true">
-                <source src="assets/focus-cat/focus-cat-preview.mp4" type="video/mp4">
+                <source src="assets/projects/focus-cat/focus-cat-preview.mp4" type="video/mp4">
               </video>
             </span>
           </button>
@@ -80,9 +127,9 @@
           <button class="stamp" type="button" data-dialog="project-homebuddy"
                   aria-label="Open details for homeBuddy">
             <span class="stamp-photo">
-              <img src="assets/homeBuddy/senior-view.png" alt="homeBuddy sign-in screen with patient, family and care team options" width="1371" height="735">
+              <img src="assets/projects/homeBuddy/senior-view.png" alt="homeBuddy sign-in screen with patient, family and care team options" width="1371" height="735">
               <video class="stamp-video" muted loop playsinline preload="none" aria-hidden="true">
-              <source src="assets/homeBuddy/homebuddy-preview.mp4" type="video/mp4">
+              <source src="assets/projects/homeBuddy/homebuddy-preview.mp4" type="video/mp4">
             </span>
           </button>
           <div class="project-text">
@@ -154,7 +201,7 @@
       <h2 id="focus-cat-title">focus cat</h2>
       <!-- Link to the code, styled as a yellow button right under the title -->
       <p class="dialog-github-row">
-        <a class="dialog-github" href="https://github.com/winnie-c8/Focus-Cat" target="_blank" rel="noopener">view the code on github ↗</a>
+        <a class="dialog-github" href="https://github.com/winnie-c8/Focus-Cat" target="_blank" rel="noopener">github ↗</a>
       </p>
       <!-- The same preview video as the stamp, shown big. It starts from the
            beginning each time the pop-up opens and pauses when it closes (script.js).
@@ -163,8 +210,8 @@
            you can drag back (or forward) through. -->
       <figure class="dialog-figure dialog-figure--hero">
         <video class="dialog-video" controls muted loop playsinline preload="none"
-               poster="assets/focus-cat/preview.png" aria-label="Focus Cat running">
-          <source src="assets/focus-cat/focus-cat-preview.mp4" type="video/mp4">
+               poster="assets/projects/focus-cat/preview.png" aria-label="Focus Cat running">
+          <source src="assets/projects/focus-cat/focus-cat-preview.mp4" type="video/mp4">
         </video>
       </figure>
       <p class="dialog-lead">a cozy pomodoro app where every minute focused buys you something new to decorate your cat's room.</p>
@@ -197,7 +244,7 @@
         <h3>the problem</h3>
         <p>My client, a third-year university student balancing classes and running a club, struggled to keep track of deadlines and stay focused once she sat down to work. Every focus app she'd tried fell short: missing key features, frustrating to use, or too expensive. She wanted one free laptop app to manage her tasks, stay focused, and actually enjoy using, so I built it for her. I also surveyed other students to see whether this was a wider problem. <strong>Most wanted to work about 5 hours a day but managed closer to 3, and everyone who had tried a focus app rated it 5/10 or lower.</strong></p>
         <figure class="dialog-figure">
-          <img src="assets/focus-cat/survey.png" alt="Bar chart: 7 students rated focus apps they'd tried; every rating was 5 out of 10 or lower">
+          <img src="assets/projects/focus-cat/survey.png" alt="Bar chart: 7 students rated focus apps they'd tried; every rating was 5 out of 10 or lower">
           <figcaption>how effective students rated the focus apps they'd tried (1–10)</figcaption>
         </figure>
       </section>
@@ -206,15 +253,15 @@
       <section class="project-dialog-section">
         <h3>iterations</h3>
         <figure class="dialog-figure">
-          <img src="assets/focus-cat/wireframe-1.png" alt="Initial wireframe of the timer screen: a large 00:00:00 with a start button">
+          <img src="assets/projects/focus-cat/wireframe-1.png" alt="Initial wireframe of the timer screen: a large 00:00:00 with a start button">
           <figcaption>initial wireframe (timer screen)</figcaption>
         </figure>
         <figure class="dialog-figure">
-          <img src="assets/focus-cat/wireframe-2.png" alt="Updated wireframe: arrow buttons to change hours, minutes and seconds">
+          <img src="assets/projects/focus-cat/wireframe-2.png" alt="Updated wireframe: arrow buttons to change hours, minutes and seconds">
           <figcaption>updated wireframe (pomodoro timer)</figcaption>
         </figure>
         <figure class="dialog-figure">
-          <img src="assets/focus-cat/wireframe-3.png" alt="Wireframe after feedback: work/break label, pause, resume and skip buttons">
+          <img src="assets/projects/focus-cat/wireframe-3.png" alt="Wireframe after feedback: work/break label, pause, resume and skip buttons">
           <figcaption>updated wireframe (custom timer)</figcaption>
         </figure>
         <p>After client feedback: the timer was buried in a menu, so I moved it to the home screen. the pomodoro timer now has pause/resume/skip controls, while the custom timer moved to a secondary panel.</p>
@@ -226,19 +273,19 @@
         <p class="dialog-label">design mockups</p>
         <div class="dialog-gallery">
           <figure class="dialog-figure">
-            <img src="assets/focus-cat/mockup-timer.png" alt="Painted timer screen in a cosy room">
+            <img src="assets/projects/focus-cat/mockup-timer.png" alt="Painted timer screen in a cosy room">
           </figure>
           <figure class="dialog-figure">
-            <img src="assets/focus-cat/mockup-menu.png" alt="Painted main menu with the cat and buttons for timer, to-do, store and productivity">
+            <img src="assets/projects/focus-cat/mockup-menu.png" alt="Painted main menu with the cat and buttons for timer, to-do, store and productivity">
           </figure>
           <figure class="dialog-figure">
-            <img src="assets/focus-cat/mockup-todo.png" alt="Painted to-do screen with a sleeping cat">
+            <img src="assets/projects/focus-cat/mockup-todo.png" alt="Painted to-do screen with a sleeping cat">
           </figure>
           <figure class="dialog-figure">
-            <img src="assets/focus-cat/mockup-tracker.png" alt="Painted productivity tracker with a graph of hours focused">
+            <img src="assets/projects/focus-cat/mockup-tracker.png" alt="Painted productivity tracker with a graph of hours focused">
           </figure>
           <figure class="dialog-figure">
-            <img src="assets/focus-cat/mockup-store.png" alt="Painted store screen with a sleeping cat and items to buy with coins">
+            <img src="assets/projects/focus-cat/mockup-store.png" alt="Painted store screen with a sleeping cat and items to buy with coins">
           </figure>
         </div>
         <p>goal: make it feel like a cozy room, not a productivity tool. hand-painted every background and all the store items to achieve this effect!</p>
@@ -248,11 +295,11 @@
       <section class="project-dialog-section">
         <h3>code architecture</h3>
         <figure class="dialog-figure">
-          <img src="assets/focus-cat/uml-1.png" alt="Initial UML class diagram">
+          <img src="assets/projects/focus-cat/uml-1.png" alt="Initial UML class diagram">
           <figcaption>initial uml diagram</figcaption>
         </figure>
         <figure class="dialog-figure">
-          <img src="assets/focus-cat/uml-2.png" alt="Updated UML class diagram">
+          <img src="assets/projects/focus-cat/uml-2.png" alt="Updated UML class diagram">
           <figcaption>updated uml diagram</figcaption>
         </figure>
         <p class="dialog-label">updates to the structure:</p>
@@ -311,11 +358,11 @@
       <!-- EDIT HERE - VIDEO: this screenshot stands in until the video exists. Swap the
            <img> for the line below. The class dialog-video makes it play when the
            pop-up opens and pause when it closes, like Focus Cat's (script.js).
-           <video class="dialog-video" controls muted loop playsinline preload="none" poster="assets/homebuddy/preview.png" aria-label="homeBuddy running"><source src="assets/homebuddy/homebuddy-demo.mp4" type="video/mp4"></video> -->
+           <video class="dialog-video" controls muted loop playsinline preload="none" poster="assets/projects/homeBuddy/preview.png" aria-label="homeBuddy running"><source src="assets/projects/homeBuddy/homebuddy-demo.mp4" type="video/mp4"></video> -->
       <figure class="dialog-figure dialog-figure--hero">
           <video class="dialog-video" controls muted loop playsinline preload="none"
-               poster="assets/homeBuddy/senior-view.png" aria-label="Focus Cat running">
-          <source src="assets/homeBuddy/homebuddy-preview.mp4" type="video/mp4">
+               poster="assets/projects/homeBuddy/senior-view.png" aria-label="Focus Cat running">
+          <source src="assets/projects/homeBuddy/homebuddy-preview.mp4" type="video/mp4">
         </video> 
       </figure>
 

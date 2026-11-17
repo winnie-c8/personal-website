@@ -77,8 +77,11 @@
 })();
 
 
+// Set to true once the vines have loaded (or failed to). The page-reveal code reads it.
+let vinesDone = false;
+
 // Projects page: vines that grow along their own lines as you scroll.
-// .vines[data-src] is the drawing (assets/vines.svg). .vines[data-guides] has one plain
+// .vines[data-src] is the drawing (assets/projects/vines.svg). .vines[data-guides] has one plain
 // stroked line per vine, in the same layer order, drawn from where the vine starts
 // growing out to its tip. Each guide line becomes a mask over its vine and is drawn
 // on bit by bit, so the vine is uncovered along its own route, curls and all.
@@ -187,7 +190,12 @@
         requestAnimationFrame(() => { resizeQueued = false; measure(); });
       }).observe(pond);
     })
-    .catch((err) => console.warn("Could not load the vines:", err));
+    .catch((err) => console.warn("Could not load the vines:", err))
+    // Either way (loaded or failed), tell the page-reveal code below it can stop waiting.
+    .finally(() => {
+      vinesDone = true;
+      document.dispatchEvent(new Event("vines:ready"));
+    });
 
   // reach[i] = lowest point (px down the page) the guide line has touched by sample i,
   // so a vine is only drawn as far as the screen has scrolled
@@ -452,4 +460,29 @@
                     e.clientY < r.top || e.clientY > r.bottom;
     if (outside) viewer.close();
   });
+})();
+
+// Projects page: uncover the page once it's ready.
+// projects.html starts with class "is-loading" on <html> and the leaf curtain covering it.
+// Once your fonts and the vine drawing are both ready, the leaves fall away and the class goes.
+(function () {
+  const root = document.documentElement;
+  if (!root.classList.contains("is-loading")) return;
+
+  // Waits for the vine code to finish (or returns straight away if it already has)
+  const vinesReady = new Promise((resolve) => {
+    if (vinesDone || !document.querySelector(".vines[data-src]")) return resolve();
+    document.addEventListener("vines:ready", resolve, { once: true });
+  });
+
+  // Safety net: on a very slow connection, show the page after 3 seconds anyway
+  const tooLong = new Promise((resolve) => setTimeout(resolve, 3000));
+
+  // Whichever comes first: everything ready, or the 3-second limit.
+  // The extra animation frame lets the vines draw their hidden starting state first.
+  Promise.race([Promise.all([document.fonts.ready, vinesReady]), tooLong])
+    .then(() => requestAnimationFrame(() => {
+      if (window.leafCurtain) window.leafCurtain.reveal();  // leaves fall away (curtain.js)
+      root.classList.remove("is-loading");
+    }));
 })();
