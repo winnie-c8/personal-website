@@ -14,6 +14,15 @@
   src: url("fonts/Cweyons-Regular.ttf") format("truetype");
   font-display: block;
 }
+/* Cweyons has no numbers, so digits (and the ↗ arrow) were falling back to a
+   system font. This adds Gochi Hand (a thicker handwritten font) under the same "TextFont" name, but
+   unicode-range limits it to just those characters, so words stay in Cweyons. */
+@font-face {
+  font-family: "TextFont";
+  src: url("fonts/GochiHand-Regular.ttf") format("truetype");
+  font-display: block;
+  unicode-range: U+0030-0039, U+2197;
+}
 /* The body text inside the project pop-ups. It's an .otf file,
    so its format is "opentype" rather than "truetype". */
 @font-face {
@@ -219,7 +228,6 @@ a:focus-visible {
   font-family: var(--font-text);
   font-size: clamp(0.85rem, 1.5vw, 1.3rem);
   letter-spacing: 0.1em;
-  opacity: 0.85;
 }
 
 /* ---------- Icon nav ---------- */
@@ -490,7 +498,7 @@ html:has(.projects-page) {
   align-items: center;
   gap: 1rem;
   margin: 0.5em 0 0;
-  font-size: clamp(0.75rem, 1vw, 0.95rem);
+  font-size: 0.8em;   /* a bit smaller than the description, and scales with it */
   color: var(--yellow);
 }
 
@@ -507,6 +515,9 @@ html:has(.projects-page) {
 .project-row:last-of-type { padding-bottom: 1.5rem; }
 
 .project {
+  /* Lets the text below size itself from this card's width (cqi units),
+     so it grows and shrinks together with the stamp next to it */
+  container-type: inline-size;
   display: grid;
   grid-template-columns: minmax(0, 2.4fr) minmax(0, 1fr);
   gap: 4%;
@@ -574,15 +585,30 @@ html:has(.projects-page) {
 .project-text {
   position: relative;
   z-index: 3;
-  font-size: clamp(0.7rem, 1.5vw, rem);
+  /* 1cqi = 1% of the card's width. clamp() keeps it between a readable
+     minimum and a sensible maximum on very small or very big screens. */
+  font-size: clamp(0.7rem, 2.6cqi, 1.15rem);
   line-height: 1.4;
 }
 .project-text h2 {
   margin: 0 0 0.35rem;
   font-family: var(--font-title);
   font-weight: normal;
-  font-size: 2.5rem;
+  font-size: clamp(1.3rem, 5.2cqi, 2.6rem);   /* sized so "homeBuddy" fits its column */
+  line-height: 1.15;
   color: var(--yellow);
+}
+/* Award tag under a project's date. Same look as the pop-up badges
+   (.dialog-highlights li): yellow border around a faint yellow tint. */
+.project-tag {
+  display: inline-block;
+  margin-top: 0.6rem;
+  padding: 0.35em 0.95em;   /* em = scales with the text size */
+  border: 1.5px solid var(--yellow);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--yellow) 16%, transparent);
+  color: var(--yellow);
+  font-size: 0.85em;
 }
 .project-text p { margin: 0; }
 .project-text p + p { margin-top: 0.4rem; }
@@ -676,7 +702,7 @@ button.stamp:focus-visible {
 
 /* The pop-up eases in, rising slightly as it appears */
 .project-dialog[open] {
-  animation: dialog-in 0.8s ease;
+  animation: dialog-in 0.5s ease;
 }
 @keyframes dialog-in {
   from { opacity: 0; transform: translateY(14px) scale(0.97); }
@@ -986,6 +1012,9 @@ html:has(.project-dialog[open]) { overflow: hidden; }
 }
 @media (max-width: 420px) {
   .project { grid-template-columns: 1fr; }
+  /* Text now sits under the stamp with the full width, so it can be bigger */
+  .project-text { font-size: 0.95rem; }
+  .project-text h2 { font-size: 1.8rem; }
 }
 
 /* On phones two thirds of the screen is cramped, so the pop-up uses most of its
@@ -1018,39 +1047,38 @@ html:has(.project-dialog[open]) { overflow: hidden; }
   overflow-x: hidden;
 }
 
-/* "back home" link floats over the top-left corner of the canvas */
+/* "back home" link floats over the top-left corner of the page */
 .about-page .back {
   position: absolute;
   z-index: 5;
   color: var(--about-dark);
 }
 
-/* The canvas: as wide as the screen, and the same shape as the Figma frame (1532 × 1800).
-   --u is "one Figma pixel" at the current screen width, so calc(var(--u) * 100) = 100 Figma px. */
-.about-canvas {
+/* The page. --u is "one Figma pixel" at the current width (the Figma frame is 1532 wide),
+   so calc(100 * var(--u)) = 100 Figma px. Everything sized with --u grows and shrinks with the screen. */
+.about {
   position: relative;
-  width: 100%;
-  aspect-ratio: 1532 / 1800;
   container-type: inline-size;
   overflow: hidden;
   --u: calc(100cqw / 1532);
+  padding-bottom: calc(150 * var(--u));
 }
 
-/* Anything with --x / --y (and optionally --w / --h / --rot) is placed using the Figma numbers */
-.about-canvas [style*="--x"] {
+/* ----- Background decorations -----
+   The only things still layered on top of each other: spirals, dots and colour blocks
+   behind the content. Their spots come from Figma: left is a percentage of the page
+   width, top scales with the page, so they move with the screen size. */
+.about-deco { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+.about-deco > * {
   position: absolute;
-  left: calc(var(--x) * var(--u));
+  left: calc(var(--x) / 1532 * 100%);
   top: calc(var(--y) * var(--u));
+  width: calc(var(--w) * var(--u));
+  height: calc(var(--h) * var(--u));
 }
-.about-canvas [style*="--w"] { width: calc(var(--w) * var(--u)); }
-.about-canvas [style*="--h"] { height: calc(var(--h) * var(--u)); }
-
-/* Background layer holds the blocks, dots and spirals behind the content */
-.about-deco { position: absolute; inset: 0; pointer-events: none; }
-
 /* Decorative images; --rot spins one, .flip mirrors one left-to-right */
-.about-canvas .art { display: block; transform: rotate(var(--rot, 0deg)); }
-.about-canvas .art.flip { transform: scaleX(-1); }
+.about-deco .art { display: block; transform: rotate(var(--rot, 0deg)); }
+.about-deco .art.flip { transform: scaleX(-1); }
 
 /* Solid colour blocks; .torn wobbles the edges using the SVG filter in about.html */
 .block--light { background: var(--about-light); }
@@ -1066,9 +1094,84 @@ html:has(.project-dialog[open]) { overflow: hidden; }
 .dots--light  { --dot: var(--about-light); }
 .dots--dark   { --dot: var(--about-dark); }
 
-/* Photo windows: hide whatever spills outside, and place the photo using Figma's crop numbers */
-.about-canvas .crop { overflow: hidden; }
-.about-canvas .crop img { position: absolute; max-width: none; }
+/* ----- Top section: two columns -----
+   The column widths are the Figma proportions: 177 margin, 579 left column,
+   49 gap, 561 right column, 166 margin. fr units keep those ratios at any width. */
+.about-intro {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 177fr 579fr 49fr 561fr 166fr;
+  align-items: start;
+}
+.about-left  { grid-column: 2; padding-top: calc(142 * var(--u)); position: relative; z-index: 0; }
+.about-right { grid-column: 4; }
+
+/* Stamp frame + photo: both sit in the same grid cell so they overlap,
+   and the photo window is placed inside the frame using Figma's margins.
+   Every number is a share of the frame, so it scales with it. */
+.stamp-frame { display: grid; position: relative; z-index: 1; }
+.stamp-frame > * { grid-area: 1 / 1; }
+.stamp-frame-art { display: block; width: 100%; height: auto; }
+.crop { position: relative; overflow: hidden; }
+.crop img { position: absolute; max-width: none; }
+/* A photo that simply fills its window, trimming the edges (used for the garden photo) */
+.crop img.crop-fill { inset: 0; width: 100%; height: 100%; object-fit: cover; }
+/* Mirror a photo left-to-right */
+.crop img.flip { transform: scaleX(-1); }
+
+/* Cafe stamp (579 x 412): photo window 524 x 362, 28 in and 24 down */
+.stamp-frame--cafe .crop {
+  width: calc(524 / 579 * 100%);
+  aspect-ratio: 524 / 362;
+  margin: calc(24 / 579 * 100%) 0 0 calc(28 / 579 * 100%);
+}
+/* Selfie stamp (260 x 341): photo window 233 x 314, 15 in and 13 down */
+.stamp-frame--selfie .crop {
+  width: calc(233 / 260 * 100%);
+  aspect-ratio: 233 / 314;
+  margin: calc(13 / 260 * 100%) 0 0 calc(15 / 260 * 100%);
+}
+/* Garden stamp (410 x 269): photo window 381 x 240, 15 in and 15 down */
+.stamp-frame--garden .crop {
+  width: calc(381 / 410 * 100%);
+  aspect-ratio: 381 / 240;
+  margin: calc(15 / 410 * 100%) 0 0 calc(15 / 410 * 100%);
+}
+
+/* Dark green square (285 x 487). It starts 203 in from the stamp's left edge and
+   tucks 146 up under the stamp's bottom, like in Figma. The stamp is drawn on top of it. */
+.about-dark-block {
+  position: relative;
+  z-index: 0;
+  width: calc(285 / 579 * 100%);
+  aspect-ratio: 285 / 487;
+  margin: calc(-146 / 579 * 100%) 0 0 calc(203 / 579 * 100%);
+  background: var(--about-dark);
+}
+/* Leaf branch on the dark square, poking out to the right (sizes are shares of the square).
+   z-index 2 puts it over the stamp's bottom edge, like in Figma. */
+.about-leaf {
+  position: absolute;
+  z-index: 2;
+  left: calc(-30.4 / 285 * 100%);
+  top: calc(78.2 / 487 * 100%);
+  width: calc(493.4 / 285 * 100%);
+  height: auto;
+  max-width: none;
+}
+
+/* Two photos that overlap: selfie at the top right, garden at the bottom left.
+   The box is 540 x 515 and starts 144 left of the right column (it pokes into the gap). */
+.photo-pair {
+  display: grid;
+  width: calc(540 / 561 * 100%);
+  aspect-ratio: 540 / 515;
+  margin: calc(56 * var(--u)) 0 0 calc(-144 / 561 * 100%);
+}
+.photo-pair > * { grid-area: 1 / 1; }
+.stamp-frame--selfie { width: calc(260 / 540 * 100%); justify-self: end; align-self: start; }
+.stamp-frame--garden { width: calc(410 / 540 * 100%); justify-self: start; align-self: end; z-index: 2; }
 
 /* Big headings ("about me" in dark green, "skills" in yellow) with their soft shadows */
 .about-title {
@@ -1076,11 +1179,13 @@ html:has(.project-dialog[open]) { overflow: hidden; }
   font-family: var(--font-title);
   font-weight: normal;
   font-size: calc(100 * var(--u));
-  line-height: 1.66;
+  line-height: 1.3;
   white-space: nowrap;
   color: var(--about-dark);
   text-shadow: calc(4 * var(--u)) calc(6 * var(--u)) calc(4 * var(--u)) #e6c761;
 }
+/* "about me" sits just right of the bio's left edge, as in Figma */
+.about-right > .about-title { margin-left: calc(15 / 561 * 100%); }
 .about-title--skills {
   color: var(--about-yellow);
   text-shadow: calc(4 * var(--u)) calc(4 * var(--u)) calc(4 * var(--u)) #91720c;
@@ -1089,24 +1194,61 @@ html:has(.project-dialog[open]) { overflow: hidden; }
 /* Bio paragraph */
 .about-bio {
   margin: 0;
-  font-family: var(--font-text);
-  font-size: calc(20 * var(--u));
-  line-height: 1.2;
+  font-family: var(--font-popup);   /* Tommy, same as the project pop-ups */
+  font-size: calc(16 * var(--u));   /* Tommy is wider than Cweyons, so smaller than Figma's 20 */
+  position: relative;
+  z-index: 3;                       /* sits in front of the leaf branch */
+  line-height: normal;
+}
+.about-bio p { margin: 0; }
+/* blank line between paragraphs */
+.about-bio p + p { margin-top: 1lh; }   /* one empty line between paragraphs, like Figma */
+
+/* Text links on the about page: same colour as the text around them, no underline,
+   and they turn the site's yellow on hover (or when reached with the Tab key) */
+.about-link {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+.about-link:hover,
+.about-link:focus-visible { color: var(--yellow); }
+/* Lighter green version ("see my projects") */
+.about-link--mid { color: var(--about-mid); }
+/* A small ↗ arrow added just after the text, raised up so it sits at the top-right corner.
+   It's part of the link, so it turns yellow on hover too. */
+.about-link--arrow::after {
+  content: "↗";
+  display: inline-block;
+  margin-left: 0.15em;
+  font-size: 0.6em;
+  vertical-align: 0.6em;
 }
 
-/* Trait list next to the dark square, right-aligned */
+/* Co-op text under the dark square, right-aligned. Figma: 392 wide, starting
+   76 left of the stamp, 48 below the dark square. */
 .about-traits {
-  margin: 0;
+  position: relative;
+  width: calc(392 / 579 * 100%);
+  margin: calc(48 / 579 * 100%) 0 0 calc(-76 / 579 * 100%);
   padding: 0;
   list-style: none;
   text-align: right;
+  z-index: 2;   /* in front of the swirls */
   font-size: calc(30 * var(--u));
   line-height: calc(50 * var(--u));
 }
 
+/* Skills section: title, then the grid centred on the page */
+.about-skills {
+  position: relative;
+  z-index: 1;
+  width: calc(1196 / 1532 * 100%);
+  margin: calc(-60 * var(--u)) auto 0;
+}
 /* Skills: 5 columns of 172px squares, 256px apart, rows 280px apart */
 .skills-grid {
-  margin: 0;
+  margin: calc(20 * var(--u)) 0 0;
   padding: 0;
   list-style: none;
   display: grid;
@@ -1117,17 +1259,33 @@ html:has(.project-dialog[open]) { overflow: hidden; }
   line-height: calc(50 * var(--u));
   text-align: center;
 }
-/* Grey square; the skill name sits near its bottom edge */
+/* Cream square with the logo centred inside */
 .skill-icon {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: center;
   aspect-ratio: 1;
-  padding-bottom: calc(12 * var(--u));
-  background: #d9d9d9;
+  padding: calc(16 * var(--u));
+  background: #feffe3;
 }
-/* "1year" line under each square (kept the same height even when empty so rows line up) */
-.skill-years { display: block; min-height: calc(50 * var(--u)); padding-top: calc(8 * var(--u)); }
+/* Logo: as big as fits in the square without stretching */
+.skill-icon img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  /* multiply makes the white behind a logo take on the cream box colour */
+  mix-blend-mode: multiply;
+}
+/* The Figma logo image is wide with lots of empty space, so it fills the
+   whole square edge to edge and trims the extra space instead */
+.skill-icon:has(.skill-logo-fill) { padding: 0; }
+.skill-icon img.skill-logo-fill { object-fit: cover; }
+/* Under each square: the skill name, then the time on the line below, packed a bit closer */
+.skill-name,
+.skill-years { display: block; line-height: calc(34 * var(--u)); }
+.skill-name { padding-top: calc(8 * var(--u)); }
+.skill-years { color: var(--about-mid); }   /* time in the lighter green */
 
 /* ---------- Projects page loading ----------
    Flowers and lily pads stay closed until the page is ready, then the ones
@@ -1166,4 +1324,108 @@ html.is-loading .deco.is-in {
 .contact-icons a:focus-visible {
   color: var(--yellow);
   outline: none;
+}
+
+/* ---------- About page: phones and small tablets ----------
+   Below 1000px the two-column layout would make the text too small to read, so
+   everything drops into one centred column, top to bottom. Sizes still scale with
+   the screen: --u is now based on a 640-wide design instead of 1532. */
+@media (max-width: 1000px) {
+  .about {
+    --u: calc(100cqw / 640);
+    padding: calc(110 * var(--u)) 1rem 3rem;   /* room for "back home" and "lets connect!" */
+  }
+  /* Decorations only make sense in the wide layout */
+  .about-deco { display: none; }
+
+  /* One column. display: contents lets the left/right column wrappers dissolve,
+     so their pieces can be put in reading order with the order property. */
+  .about-intro {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: calc(40 * var(--u));
+    max-width: 640px;
+    margin-inline: auto;
+  }
+  .about-left, .about-right { display: contents; }
+  .about-right > .about-title { order: 1; margin: 0; }
+  .about-bio                  { order: 2; }
+  .stamp-frame--cafe          { order: 3; width: 100%; }
+  .about-traits               { order: 4; }
+  .photo-pair                 { order: 5; }
+  .about-dark-block           { display: none; }   /* the dark square + leaf are decoration here */
+
+  .about-title { line-height: 1.1; }
+  .about-bio { font-size: 0.9rem; line-height: 1.45; }
+  .about-traits {
+    width: auto;
+    margin: 0;
+    text-align: center;
+    font-size: 1.4rem;
+    line-height: 1.6;
+  }
+  .photo-pair { width: 100%; margin: 0; }
+
+  .about-skills { width: 100%; max-width: 640px; margin: calc(60 * var(--u)) auto 0; text-align: center; }
+  /* Skills: 3 squares per row, sharing the column width */
+  /* minmax(0, 1fr) makes every column exactly the same width, even when a long
+     name like "javascript" would otherwise push its column (and box) wider */
+  .skills-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: calc(36 * var(--u));
+    row-gap: calc(36 * var(--u));
+    font-size: 1rem;
+  }
+  /* Padding as a share of the box, so logos stay a good size inside smaller boxes */
+  .skill-icon { padding: 10%; }
+  /* Smaller, tighter text under the boxes so the long names fit on one line */
+  .skill-name,
+  .skill-years { line-height: 1.4; }
+}
+/* Tablets in the one-column layout: skills fit 5 across (2 even rows) */
+@media (min-width: 600px) and (max-width: 1000px) {
+  .skills-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+}
+
+/* ---------- About page: fade in on load and on scroll ----------
+   A tiny script in about.html's <head> adds .reveal-on to <html> before anything is drawn,
+   so these pieces start see-through and a little lower. script.js then adds .is-visible
+   to each one as it comes into view, and it slowly fades in and rises into place.
+   "translate" is used (not "transform") so it doesn't undo the spirals' rotate/flip.
+   Change 1.2s to make the fade slower or faster. */
+html.reveal-on :is(
+  .about-deco > *,
+  .about-title,
+  .about-bio p,
+  .stamp-frame,
+  .about-dark-block,
+  .about-traits li,
+  .skill
+) {
+  opacity: 0;
+  translate: 0 calc(30 * var(--u, 1px));
+  transition: opacity 1.2s ease, translate 1.2s ease;
+}
+/* Same list plus .is-visible, so this rule always outranks the hiding rule above */
+html.reveal-on :is(
+  .about-deco > *,
+  .about-title,
+  .about-bio p,
+  .stamp-frame,
+  .about-dark-block,
+  .about-traits li,
+  .skill
+).is-visible {
+  opacity: 1;
+  translate: 0 0;
+}
+/* People who prefer reduced motion: never hide anything */
+@media (prefers-reduced-motion: reduce) {
+  html.reveal-on :is(.about-deco > *, .about-title, .about-bio p, .stamp-frame,
+                     .about-dark-block, .about-traits li, .skill) {
+    opacity: 1;
+    translate: none;
+    transition: none;
+  }
 }

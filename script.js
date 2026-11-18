@@ -485,3 +485,52 @@ let vinesDone = false;
       root.classList.remove("is-loading");
     }));
 })();
+
+// About page: everything slowly fades in (and drifts up a little) as it comes into view,
+// including the top of the page when it first loads. The hiding is done by CSS as soon as
+// about.html's <head> adds "reveal-on" to <html>; this code un-hides each piece.
+(function () {
+  const root = document.documentElement;
+  if (!root.classList.contains("reveal-on")) return;
+  // No way to watch scrolling (very old browser): just show everything
+  if (!("IntersectionObserver" in window)) { root.classList.remove("reveal-on"); return; }
+
+  // The pieces that fade in, one by one (same list as in styles.css)
+  const items = document.querySelectorAll([
+    ".about-deco > *",
+    ".about-title",
+    ".about-bio p",
+    ".stamp-frame",
+    ".about-dark-block",
+    ".about-traits li",
+    ".skill",
+  ].join(","));
+
+  // Once at least 15% of a piece is on screen, fade it in and stop watching it.
+  // Pieces already on screen when the page opens get a growing delay (0.15s apart),
+  // so the top of the page fades in one piece after another.
+  let firstBatch = true;
+  const observer = new IntersectionObserver((entries) => {
+    let i = 0;
+    let skillCount = 0;  // skill boxes appearing in this batch, counted left to right
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      if (entry.target.classList.contains("skill")) {
+        // Skill boxes always go one by one, left to right, 0.2s apart.
+        // (Entries arrive in page order, which is left to right along each row.)
+        entry.target.style.transitionDelay = `${0.2 * skillCount++}s`;
+      } else if (firstBatch) {
+        entry.target.style.transitionDelay = `${0.15 * i++}s`;
+      }
+      entry.target.classList.add("is-visible");
+      observer.unobserve(entry.target);
+    });
+    firstBatch = false;
+  }, { threshold: 0.15 });
+
+  // Start watching after the browser has drawn the hidden state (two frames later),
+  // so the pieces at the top really fade instead of just appearing.
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    items.forEach((el) => observer.observe(el));
+  }));
+})();

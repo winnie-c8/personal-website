@@ -10,6 +10,10 @@
   <link rel="preload" href="fonts/DarumadropOne-Regular.ttf" as="font" type="font/ttf" crossorigin>
   <link rel="preload" href="fonts/Cweyons-Regular.ttf" as="font" type="font/ttf" crossorigin>
   <link rel="stylesheet" href="styles.css">
+  <!-- Turns on the fade-in before anything is drawn, so the top of the page starts hidden
+       instead of flashing up and then disappearing. If JavaScript is off this never runs,
+       and everything just shows normally. -->
+  <script>document.documentElement.classList.add("reveal-on");</script>
 </head>
 <body class="page about-page">
 
@@ -59,102 +63,117 @@
       </ul>
     </div>
 
-  <!-- The whole page is one "canvas" drawn at the Figma size (1532 × 1800) and scaled to fit
-       the screen width. Each item's --x / --y / --w / --h are the pixel numbers from Figma. -->
-  <main class="about-canvas">
+  <!-- Layout: the content flows in a grid whose column widths are proportions of the
+       Figma frame (177 : 579 : 49 : 561 : 166), so it stretches and shrinks with the screen.
+       Sizes use --u = one Figma pixel at the current page width.
+       Only the background decorations (.about-deco) are layered behind, placed by percentage.
+       Below 1000px wide, styles.css stacks everything into one column. -->
+  <main class="about">
 
     <!-- ===== Background layer: decorations that sit behind everything ===== -->
     <div class="about-deco" aria-hidden="true">
       <!-- light green blocks (the torn tall strip and the block behind the selfies) -->
-      <div class="block block--light" style="--x:1072; --y:554;  --w:460; --h:271;"></div>
-      <div class="block block--light torn" style="--x:112;  --y:-30;  --w:429; --h:2165;"></div>
+      <div class="block block--light" style="--x:1040; --y:897;  --w:460; --h:271;"></div>
+      <div class="block block--light torn" style="--x:112;  --y:-30;  --w:429; bottom:0; height:auto;"></div>
 
       <!-- dot patterns (drawn with CSS, see .dots in styles.css) -->
       <div class="dots dots--yellow" style="--x:-11;  --y:73;   --w:460; --h:337;"></div>
-      <div class="dots dots--yellow" style="--x:1145; --y:474;  --w:216; --h:553;"></div>
-      <div class="dots dots--light"  style="--x:637;  --y:1270; --w:298; --h:414;"></div>
-      <div class="dots dots--dark"   style="--x:341;  --y:1446; --w:334; --h:362;"></div>
-      <img class="art" src="assets/about/dot-circle.svg" alt="" style="--x:499;  --y:1112; --w:248; --h:248;">
-      <img class="art" src="assets/about/dot-circle.svg" alt="" style="--x:1266; --y:1465; --w:248; --h:248;">
-
-      <!-- the dark green square the leaf branch grows across -->
-      <div class="block block--dark" style="--x:380; --y:408; --w:285; --h:487;"></div>
+      <div class="dots dots--yellow" style="--x:1172; --y:1201; --w:216; --h:553;"></div>
+      <div class="dots dots--light"  style="--x:623;  --y:1534; --w:298; --h:414;"></div>
+      <img class="art" src="assets/about/dot-circle.svg" alt="" style="--x:485;  --y:1376; --w:248; --h:248;">
 
       <!-- spirals: each img uses the exact size of its exported SVG -->
-      <img class="art" src="assets/about/spiral-yellow-small.svg"   alt="" style="--x:999;  --y:1289; --w:107.5; --h:115.3; --rot:74.25deg;">
-      <img class="art flip" src="assets/about/spiral-lightgreen-big.svg" alt="" style="--x:13; --y:1526; --w:159.7; --h:149.4;">
-      <img class="art" src="assets/about/spiral-yellow-big.svg"     alt="" style="--x:1010; --y:1471; --w:157.3; --h:158.8;">
-      <img class="art" src="assets/about/spiral-darkgreen-small.svg" alt="" style="--x:97;   --y:785;  --w:112.7; --h:110.7;">
-      <img class="art" src="assets/about/spiral-darkgreen-big.svg"  alt="" style="--x:1277; --y:995;  --w:211;   --h:196.2;">
-      <img class="art" src="assets/about/spiral-darkgreen-small.svg" alt="" style="--x:64;   --y:1318; --w:112.7; --h:110.7;">
+      <img class="art flip" src="assets/about/spiral-lightgreen-big.svg" alt="" style="--x:13; --y:1796; --w:159.7; --h:149.4;">
+      <img class="art" src="assets/about/spiral-darkgreen-small.svg" alt="" style="--x:78;   --y:772;  --w:112.7; --h:110.7;">
+      <img class="art" src="assets/about/spiral-darkgreen-big.svg"  alt="" style="--x:1277; --y:1264;  --w:211;   --h:196.2;">
+      <img class="art" src="assets/about/spiral-darkgreen-small.svg" alt="" style="--x:64;   --y:1588; --w:112.7; --h:110.7;">
       <img class="art" src="assets/about/spiral-lightgreen.svg"     alt="" style="--x:22;   --y:592;  --w:159.7; --h:149.4;">
-      <img class="art" src="assets/about/spiral-yellow.svg"         alt="" style="--x:1286; --y:346;  --w:107.6; --h:118.5;">
-      <img class="art" src="assets/about/spiral-yellow-big.svg"     alt="" style="--x:1345; --y:515;  --w:157.3; --h:158.8;">
+      <img class="art" src="assets/about/spiral-yellow.svg"         alt="" style="--x:1291; --y:13;  --w:107.6; --h:118.5;">
+      <img class="art" src="assets/about/spiral-yellow-big.svg"     alt="" style="--x:1316; --y:810;  --w:157.3; --h:158.8;">
     </div>
 
-    <!-- ===== About me ===== -->
-    <h1 class="about-title" style="--x:825; --y:16;">about me</h1>
+    <section class="about-intro">
 
-    <!-- EDIT HERE - YOUR BIO -->
-    <p class="about-bio" style="--x:811; --y:188; --w:489;">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ultricies id metus vel ultricies.
-      Donec at molestie nisi, at lacinia turpis. Donec sed quam ut orci varius porta at et ligula.
-      Quisque dapibus urna volutpat mattis lobortis. Donec accumsan in felis eu feugiat. Integer dictum
-      lorem non sapien lacinia, sit amet accumsan est scelerisque. Suspendisse potenti. Fusce at
-      tincidunt sapien, et consectetur ligula. Fusce turpis ex, vestibulum ac tincidunt vitae,
-      ultrices et mauris.
-    </p>
+      <!-- Left column: big photo stamp, dark square with the leaf, then the co-op text -->
+      <div class="about-left">
+        <!-- Stamp frame underneath, photo on top inside it -->
+        <div class="stamp-frame stamp-frame--cafe">
+          <img class="stamp-frame-art" src="assets/about/stamp-big.svg" alt="">
+          <div class="crop">
+            <img src="assets/about/photo-cafe.png" alt="Winnie smiling at a cafe table"
+                 style="left:-22.97%; top:-0.04%; width:122.97%; height:100.07%;">
+          </div>
+        </div>
 
-    <!-- Photo stamps: the frame SVG sits underneath, the photo is placed on top inside it.
-         The photo crops (.crop img) are copied from Figma so they frame your face the same way. -->
-    <img class="art" src="assets/about/stamp-big.svg" alt="" style="--x:177; --y:142; --w:579; --h:412;">
-    <div class="crop" style="--x:205; --y:166; --w:524; --h:362;">
-      <img src="assets/about/photo-cafe.png" alt="Winnie smiling at a cafe table"
-           style="left:-22.97%; top:-0.04%; width:122.97%; height:100.07%;">
-    </div>
+        <!-- Dark green square, tucked up under the bottom of the stamp, with the leaf branch on it -->
+        <div class="about-dark-block">
+          <img class="about-leaf" src="assets/about/leaf-branch.svg" alt="" aria-hidden="true">
+        </div>
 
-    <img class="art" src="assets/about/stamp-small.svg" alt="" style="--x:843; --y:670; --w:260; --h:269;">
-    <div class="crop" style="--x:857; --y:690; --w:232; --h:230;">
-      <img src="assets/about/photo-selfie.png" alt=""
-           style="left:-52.79%; top:-0.05%; width:170.63%; height:129.22%;">
-    </div>
+        <!-- EDIT HERE - CO-OP TEXT AND LINKS (right-aligned, under the dark square) -->
+        <ul class="about-traits">
+          <li>currently searching for</li>
+          <li>summer 2027 co-ops!</li>
+          <!-- Links: arrow sits top-right of the text, whole link turns yellow on hover (see .about-link in styles.css) -->
+          <li><a class="about-link about-link--arrow" href="https://www.linkedin.com/in/winniechen3" target="_blank" rel="noopener noreferrer">contact me</a></li>
+          <!-- EDIT HERE - RESUME: save your resume as assets/resume.pdf and this link opens it in a new tab -->
+          <li><a class="about-link about-link--arrow" href="assets/resume.pdf" target="_blank" rel="noopener">resume</a></li>
+        </ul>
+      </div>
 
-    <img class="art" src="assets/about/stamp-tall.svg" alt="" style="--x:973; --y:424; --w:260; --h:341;">
-    <div class="crop" style="--x:988; --y:448; --w:232; --h:297;">
-      <img src="assets/about/photo-selfie.png" alt="Selfie of Winnie"
-           style="left:-52.79%; top:-0.04%; width:170.63%; height:100.07%;">
-    </div>
+      <!-- Right column: title, bio, then the two overlapping photo stamps -->
+      <div class="about-right">
+        <h1 class="about-title">about me</h1>
 
-    <!-- leaf branch drawn over the dark square and the big stamp -->
-    <img class="art" src="assets/about/leaf-branch.svg" alt="" aria-hidden="true"
-         style="--x:349.6; --y:389.3; --w:546.7; --h:505.7;">
+        <!-- EDIT HERE - YOUR BIO. Each paragraph is its own <p>. -->
+        <div class="about-bio">
+          <p>hi im winnie :)</p>
+          <p>im a systems design student who’s excited to explore and build things. 2x hackathon winner! <a class="about-link about-link--arrow about-link--mid" href="projects.html">see my projects</a> right now, im working on an electric skateboard with <a class="about-link" href="https://electriummobility.com/" target="_blank" rel="noopener noreferrer">electrium mobility</a>. im also interested in product and UX design, software dev, and would love to explore more of mechanical!</p>
+          <p>im fascinated by good design. i LIVE for the aesthetic, but good design goes beyond that. my trifecta is meaningful, inclusive, intuitive. i strive to create meaning in everything i do - build things that have a real impact on the people they’re supposed to help. inclusive design is hard, but makes all the difference. the world is designed for the average person, and i want to include people on the edges too. intuitive design feels like a given until you’ve truly experienced it. for me, that was navigating the japanese subway without knowing a lick of japanese. go to japan, itll change your life.</p>
+          <p>“fun” to me is sitting in my room with a good movie, a delicious snack (bonus points for cashews or chocolate covered pretzels), and a craft project. i probably have 10 wips (works in progress) right now, that range from knitting to visual art to sewing. but ill still proabably pick up a new craft next week because i watched a youtube video on it.</p>
+        </div>
 
-    <!-- EDIT HERE - YOUR TRAITS (right-aligned, ending at x=355) -->
-    <ul class="about-traits" style="--x:55; --y:582; --w:300;">
-      <li>loves learning</li>
-      <li>skill oriented</li>
-      <li>buzz word</li>
-      <li>buzz word</li>
-      <li>buzz word</li>
-    </ul>
+        <!-- Selfie (top right) and garden photo (bottom left) overlap in one shared box -->
+        <div class="photo-pair">
+          <!-- Garden: frame underneath, mirrored photo on top -->
+          <div class="stamp-frame stamp-frame--garden">
+            <img class="stamp-frame-art" src="assets/about/stamp-wide.svg" alt="">
+            <div class="crop">
+              <img class="crop-fill flip" src="assets/about/photo-garden.png" alt="Winnie as a kid standing in a garden">
+            </div>
+          </div>
+          <!-- Selfie: photo underneath, frame on top -->
+          <div class="stamp-frame stamp-frame--selfie">
+            <div class="crop">
+              <img src="assets/about/photo-selfie.png" alt="Selfie of Winnie"
+                   style="left:-55.25%; top:-0.04%; width:178.59%; height:99.44%;">
+            </div>
+            <img class="stamp-frame-art" src="assets/about/stamp-tall.svg" alt="">
+          </div>
+        </div>
+      </div>
+    </section>
 
     <!-- ===== Skills ===== -->
-    <h2 class="about-title about-title--skills" style="--x:134; --y:900;">skills</h2>
-
-    <!-- EDIT HERE - YOUR SKILLS: each card is a grey square (drop an <img> in .skill-icon later),
-         the name sits inside the bottom of the square and the years go underneath. -->
-    <ul class="skills-grid" style="--x:122; --y:1080;">
-      <li class="skill"><span class="skill-icon"><span class="skill-name">figma</span></span><span class="skill-years">1year</span></li>
-      <li class="skill"><span class="skill-icon"><span class="skill-name">python</span></span><span class="skill-years"></span></li>
-      <li class="skill"><span class="skill-icon"><span class="skill-name">java</span></span><span class="skill-years"></span></li>
-      <li class="skill"><span class="skill-icon"><span class="skill-name">c++</span></span><span class="skill-years"></span></li>
-      <li class="skill"><span class="skill-icon"><span class="skill-name">solidworks</span></span><span class="skill-years"></span></li>
-      <li class="skill"><span class="skill-icon"><span class="skill-name">javascript</span></span><span class="skill-years">1year</span></li>
-      <li class="skill"><span class="skill-icon"><span class="skill-name">HTML</span></span><span class="skill-years">1year</span></li>
-      <li class="skill"><span class="skill-icon"><span class="skill-name">css</span></span><span class="skill-years">1year</span></li>
-      <li class="skill"><span class="skill-icon"><span class="skill-name">github</span></span><span class="skill-years">1year</span></li>
-      <li class="skill"><span class="skill-icon"><span class="skill-name">react.js</span></span><span class="skill-years">1year</span></li>
+    <section class="about-skills">
+      <h2 class="about-title about-title--skills">skills</h2>
+    <!-- EDIT HERE - YOUR SKILLS: each card is a cream square with the logo inside,
+         and the line underneath says how long. Order and years match the Figma frame.
+         Under each square: the skill name, then the time on the line below. -->
+    <ul class="skills-grid">
+      <li class="skill"><span class="skill-icon"><img src="assets/about/skills/java.png" alt="Java"></span><span class="skill-name">java</span><span class="skill-years">4 years</span></li>
+      <li class="skill"><span class="skill-icon"><img src="assets/about/skills/python.png" alt="Python"></span><span class="skill-name">python</span><span class="skill-years">5 years</span></li>
+      <li class="skill"><span class="skill-icon"><img src="assets/about/skills/cpp.png" alt="C++"></span><span class="skill-name">c++</span><span class="skill-years">1 year</span></li>
+      <!-- the Figma image is wide with the logo in the middle, so it's cropped to fill the square -->
+      <li class="skill"><span class="skill-icon"><img class="skill-logo-fill" src="assets/about/skills/figma.png" alt="Figma"></span><span class="skill-name">figma</span><span class="skill-years">1 year</span></li>
+      <li class="skill"><span class="skill-icon"><img src="assets/about/skills/solidworks.svg" alt="SolidWorks"></span><span class="skill-name">solidworks</span><span class="skill-years">6 months</span></li>
+      <li class="skill"><span class="skill-icon"><img src="assets/about/skills/github.svg" alt="GitHub"></span><span class="skill-name">github</span><span class="skill-years">1 year</span></li>
+      <li class="skill"><span class="skill-icon"><img src="assets/about/skills/html.svg" alt="HTML"></span><span class="skill-name">HTML</span><span class="skill-years">5 years</span></li>
+      <li class="skill"><span class="skill-icon"><img src="assets/about/skills/css.svg" alt="CSS"></span><span class="skill-name">css</span><span class="skill-years">5 years</span></li>
+      <li class="skill"><span class="skill-icon"><img src="assets/about/skills/javascript.svg" alt="JavaScript"></span><span class="skill-name">javascript</span><span class="skill-years">1 year</span></li>
+      <li class="skill"><span class="skill-icon"><img src="assets/about/skills/react.svg" alt="React.js"></span><span class="skill-name">react.js</span><span class="skill-years">1 month</span></li>
     </ul>
+    </section>
   </main>
   <!-- Makes the "lets connect!" dropdown open and close -->
   <script src="script.js"></script>
