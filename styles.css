@@ -1099,7 +1099,7 @@ html:has(.project-dialog[open]) { overflow: hidden; }
    49 gap, 561 right column, 166 margin. fr units keep those ratios at any width. */
 .about-intro {
   position: relative;
-  z-index: 1;
+  z-index: 2;   /* above the skills section, whose top edge overlaps the "contact me" / "resume" links */
   display: grid;
   grid-template-columns: 177fr 579fr 49fr 561fr 166fr;
   align-items: start;
@@ -1208,7 +1208,10 @@ html:has(.project-dialog[open]) { overflow: hidden; }
    and they turn the site's yellow on hover (or when reached with the Tab key) */
 .about-link {
   color: inherit;
-  text-decoration: none;
+  /* thin dotted underline, sitting a little below the text */
+  text-decoration: underline dotted;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
   transition: color 0.15s ease;
 }
 .about-link:hover,
@@ -1244,7 +1247,7 @@ html:has(.project-dialog[open]) { overflow: hidden; }
   position: relative;
   z-index: 1;
   width: calc(1196 / 1532 * 100%);
-  margin: calc(-60 * var(--u)) auto 0;
+  margin: calc(20 * var(--u)) auto 0;   /* gap above "skills"; raise to move it further down */
 }
 /* Skills: 5 columns of 172px squares, 256px apart, rows 280px apart */
 .skills-grid {
